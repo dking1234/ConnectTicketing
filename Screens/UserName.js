@@ -1,0 +1,173 @@
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TextInput, Image } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import BackButton from '../Components/BackButton';
+import Button from '../Components/Button';
+import CustomTextInput from '../Components/CustomTextInput';
+
+const UserName = () => {
+
+const navigation = useNavigation();
+
+const [otpValues, setOtpValues] = useState(['', '', '', '']);
+const [error, setError] = useState(null); // State variable for error message
+const [isLoading, setIsLoading] = useState(false);
+
+const inputRefs = [null, null, null, null];
+
+const handleOtpChange = (value, index) => {
+  if (value.length === 1 && index < 3) {
+    setOtpValues((prevValues) => {
+      const newValues = [...prevValues];
+      newValues[index] = value;
+      return newValues;
+    });
+    inputRefs[index + 1].focus();
+  } else if (value.length === 0 && index > 0) {
+    setOtpValues((prevValues) => {
+      const newValues = [...prevValues];
+      newValues[index] = value;
+      return newValues;
+    });
+    inputRefs[index - 1].focus();
+  } else {
+    setOtpValues((prevValues) => {
+      const newValues = [...prevValues];
+      newValues[index] = value;
+      return newValues;
+    });
+  }
+};
+
+const route = useRoute(); // Use useRoute to get the route params
+  const phoneNumber = route.params?.phoneNumber || ''; // Get phoneNumber from route params
+
+  const handleRegistration = () => {
+    // Handle the registration logic here
+
+    navigation.navigate('MainStack', { screen: 'Tab', params: { screen: 'HomeScreen' } });
+
+  
+   
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+    
+    <BackButton/>
+
+    <View style={styles.logoContainer}>
+        <Image source={require('../Images/Connect.png')} style={styles.logo} />
+      </View>
+    
+    <View style={styles.textContainer}>
+    <Text style={styles.headerText}>Wasifu</Text>
+    <Text style={styles.descriptText}>Majina yako sahihi yatakuwezesha kutambulika na kuaminika kirahisi na vijumbe pamoja na memba wengine</Text>
+    </View>
+    
+    <View style={{alignItems: 'center'}}>
+    <View style={styles.textInput}>
+        <CustomTextInput
+          value={phoneNumber}
+          placeholder="Andika jina lako"
+          onChangeText={(text) => setPhoneNumber(text)}
+        />
+      </View>
+       
+          <View style={styles.buttonContainer}>
+        <Button
+          title={
+            <>
+              Hifadhi{' '}
+            </>
+          }
+          onPress={handleRegistration}
+          />
+      </View>
+
+          </View>
+
+    </SafeAreaView>
+  );
+};
+
+export default UserName;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  arrowContainer: {
+    padding: 5,
+    width: 70,
+    height: 30,
+    backgroundColor: '#94BBAD',
+    borderRadius: 30,
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: 10,
+    marginTop: 20
+  },
+
+  headerText: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginTop: -40,
+    marginBottom: 30,
+  },
+
+  textContainer: {
+    alignItems: 'center',
+  },
+
+  descriptText: {
+    fontSize: 16,
+    textAlign: 'center',
+    width: '65%'
+  },
+
+  input: {
+    borderBottomColor: '#14684E',
+    borderBottomWidth: 2,
+    fontSize: 50,
+    color: '#14684E',
+    textAlign: 'center',
+    width: 50,
+    paddingTop: 50,
+    marginBottom: 30,
+  },
+
+  buttonContainer: {
+    marginTop: 20,
+    marginBottom: 50,
+  },
+
+  checkboxContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 10,
+  },
+  checkboxText: {
+    marginLeft: 10,
+  },
+  linkText: {
+    color: 'blue',
+    fontWeight: '500',
+  },
+
+  textInput: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+  },
+  logoContainer: {
+    alignItems: 'center',
+  },
+  logo: {
+    width: 300,
+    height: 300,
+    marginTop: -40,
+    resizeMode: 'contain',
+  },
+});

@@ -6,8 +6,6 @@ import Profile from '../Screens/Profile';
 import Notification from '../Screens/Notification';
 import Ticket from '../Screens/Ticket';
 import HomeScreen from '../Screens/HomeScreen';
-import SearchResult from '../Screens/SearchResult';
-import CustomHeader from './CustomHeader';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -15,9 +13,6 @@ const Stack = createStackNavigator();
 const HomeStack = () => (
     <Stack.Navigator initialRouteName="HomeScreen">
         <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }} />
-        <Stack.Screen name="SearchResult" component={SearchResult} options={{
-        header: (props) => <CustomHeader {...props} />
-    }} />
     </Stack.Navigator>
 );
 

@@ -27,21 +27,22 @@ const styles = StyleSheet.create({
     headerContainer: {
         flexDirection: 'row',
         height: 80,
-        backgroundColor: '#f4511e',
+        backgroundColor: '#FF7927',
         justifyContent: 'center',
         alignItems: 'center',
-        borderBottomWidth: 0.5,
-        borderBottomColor: '#ddd',
     },
     leftIcon: {
+        marginTop: 10,
         position: 'absolute',
         left: 10,
     },
     rightIcon: {
+        marginTop: 10,
         position: 'absolute',
         right: 10,
     },
     headerTitle: {
+        marginTop: 10,
         fontWeight: 'bold',
         fontSize: 18,
         color: '#fff',
@@ -52,9 +53,8 @@ const styles = StyleSheet.create({
         color: '#fff',
     },
     textHeaderView:{
-        flex: 1,
         flexDirection: 'column',
-        marginLeft: 150,
+        marginRight: 150,
 
 
     }

@@ -12,7 +12,6 @@ const styles = StyleSheet.create({
     height: 200,
     resizeMode: 'cover',
     marginBottom: 20
-
   },
   inputDateRow:{
     flexDirection: 'row',
@@ -29,6 +28,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
+  },
+  SearchResultContainer:{
+    backgroundColor: '#FF7927',
+    width: '100%',
+    height: 120,
   },
 });
 

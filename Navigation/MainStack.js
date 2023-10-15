@@ -5,6 +5,10 @@ import ClassCondition from '../Screens/ClassCondition';
 import CustomHeader from '../Components/CustomHeader';
 import SeatSelection from '../Screens/SeatSelection';
 import SearchResult from '../Screens/SearchResult';
+import SelectPayment from '../Screens/SelectPayment';
+import Payments from '../Screens/Payments';
+import ProcessedPayments from '../Screens/ProcessedPayments';
+import TicketScreen from '../Screens/TicketScreen';
 
 
 const Stack = createStackNavigator();
@@ -22,6 +26,16 @@ const MainStack = () => {
         <Stack.Screen name="ClassCondition" component={ClassCondition} options={{
           header: (props) => <CustomHeader {...props} />
         }} />
+         <Stack.Screen name="SelectPayment" component={SelectPayment} options={{
+          header: (props) => <CustomHeader {...props} />
+        }} />
+         <Stack.Screen name="Payments" component={Payments} options={{
+          header: (props) => <CustomHeader {...props} />
+        }} />
+        
+        <Stack.Screen name="ProcessedPayments" component={ProcessedPayments} options={{ headerShown: false }} />
+        <Stack.Screen name="TicketScreen" component={TicketScreen} options={{ headerShown: false }} />
+
       </Stack.Navigator>
     
   );

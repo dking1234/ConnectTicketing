@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     bottom: 50,
     left: 0,
     right: 0,
-    backgroundColor: '#FF7927',
+    backgroundColor: '#152970',
     paddingVertical: 15,
     borderRadius: 10,
     marginHorizontal: 40,

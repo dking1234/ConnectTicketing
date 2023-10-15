@@ -2,33 +2,26 @@ import { View, Text, StyleSheet } from 'react-native'
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const PassengerContainer = () => {
+const FareCondition = () => {
   return (
     <View>
         <View style={styles.passengerDetailsContainer}>
           <View style={styles.marginContainer}>
             <View style={styles.row}>
-                <Text style={styles.title}>Passenger Details</Text>
-                <Text style={styles.textColor}>Edit</Text>
+                <Text style={styles.title}>Fare Condition</Text>
             </View>
           <View style={styles.line}/>
-            <View style={styles.row}>
-                <Text style={styles.text}>Wilhemo Thomas</Text>
-                <Text style={styles.text}>Adult</Text>
-            </View>
           </View>
-          <View style={styles.borderBackground}>
-            <View style={styles.rowIcon}>
-            <Icon name="ticket" size={20} color="#000" />
-            <Text>Your ticket information will be sent to: 0620229713</Text>
-            </View>
-          </View>
+          <Text style={styles.textReservation}>All reservations are valid for the date and time chosen only</Text>
+          <Text style={styles.textReservationDetails}>
+  Non-refundable fare. Cancelable up to 1 hour before departure. Balance of the fare will be transferred to the OurBus Account, available for settling with partner buses.
+</Text>
         </View>
     </View>
   )
 }
 
-export default PassengerContainer
+export default FareCondition
 
 const styles = StyleSheet.create({
     passengerDetailsContainer:{
@@ -77,5 +70,16 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         borderColor: '#FF7927',
         borderWidth: 1
+    },
+    textReservation:{
+        fontWeight: '500',
+        marginHorizontal: 10
+    },
+    textReservationDetails:{
+        fontSize: 13,
+        fontWeight: '400',
+        textAlign: 'auto',
+        width: '90%',
+        margin: 10
     }
 });

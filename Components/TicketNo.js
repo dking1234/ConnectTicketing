@@ -2,33 +2,26 @@ import { View, Text, StyleSheet } from 'react-native'
 import React from 'react';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const PassengerContainer = () => {
+const TicketNo = () => {
   return (
     <View>
         <View style={styles.passengerDetailsContainer}>
           <View style={styles.marginContainer}>
             <View style={styles.row}>
-                <Text style={styles.title}>Passenger Details</Text>
-                <Text style={styles.textColor}>Edit</Text>
+                <Text style={styles.textGray}>Tickets (1 passenger)</Text>
+                <Text style={styles.textBold}>Seat No.14</Text>
             </View>
-          <View style={styles.line}/>
             <View style={styles.row}>
-                <Text style={styles.text}>Wilhemo Thomas</Text>
-                <Text style={styles.text}>Adult</Text>
+                <Text style={styles.textGray}><Text style={styles.textBold}>Total</Text> (taxes included) </Text>
+                <Text style={styles.textBold}>75,000 Tsh</Text>
             </View>
-          </View>
-          <View style={styles.borderBackground}>
-            <View style={styles.rowIcon}>
-            <Icon name="ticket" size={20} color="#000" />
-            <Text>Your ticket information will be sent to: 0620229713</Text>
-            </View>
-          </View>
+           </View>
         </View>
     </View>
   )
 }
 
-export default PassengerContainer
+export default TicketNo
 
 const styles = StyleSheet.create({
     passengerDetailsContainer:{
@@ -51,7 +44,15 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 14,
-        marginTop: 10,
+    },
+    textGray: {
+        fontSize: 14,
+        color: 'gray'
+    },
+    textBold: {
+        fontSize: 14,
+        color: '#152970',
+        fontWeight: 'bold',
     },
     textColor: {
         fontSize: 14,
@@ -77,5 +78,16 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         borderColor: '#FF7927',
         borderWidth: 1
+    },
+    textReservation:{
+        fontWeight: '500',
+        marginHorizontal: 10
+    },
+    textReservationDetails:{
+        fontSize: 13,
+        fontWeight: '400',
+        textAlign: 'auto',
+        width: '90%',
+        margin: 10
     }
 });

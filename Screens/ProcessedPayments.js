@@ -24,7 +24,7 @@ const ProcessedPayments = () => {
         </View>
         <Text style={styles.heading}>Your payment is being Processed</Text>
         <Text style={styles.subtext}>
-  Once the operation is completed, you can view the ticket to see more details.
+  {`Once the operation is completed,you can \nview the ticket to see more details.`}
 </Text>
 
       </View>
@@ -66,5 +66,7 @@ const styles = StyleSheet.create({
   },
   subtext: {
     textAlign: 'center',
+    fontSize: 16,
+    marginVertical: 10,
   },
 });

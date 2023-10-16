@@ -1,18 +1,25 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import CustomShape from '../Components/CustomShape ';
+import { View, StyleSheet, Text, ImageBackground } from 'react-native';
+import TicketHeader from '../Components/TicketHeader';
+import WideButton from '../Components/WideButton';
+import TicketCard from '../Components/TicketCard';
+import { useNavigation } from '@react-navigation/native';
 
 const TicketScreen = () => {
+
+  const navigation = useNavigation();
+  
+  const handleDownload = () => {
+    navigation.navigate('HomeScreen');
+  };
+
   return (
     <View style={styles.outerContainer}>
-      <CustomShape>
-        <Text style={styles.headerText}>Your Ticket</Text>
-        <Text>Wilhelmo Thomas</Text>
-        <Text>Dar 05:30 AM - Mwanza 08:25 PM</Text>
-        {/* ... Rest of your ticket details ... */}
-        <Text>ID 506-53</Text>
-        <Text style={styles.footerText}>Download Ticket</Text>
-      </CustomShape>
+      <TicketHeader />
+      <TicketCard />
+      <View style={styles.wideButton}>
+      <WideButton title="Download Ticket" onPress={handleDownload}/>
+      </View>
     </View>
   );
 };
@@ -20,17 +27,13 @@ const TicketScreen = () => {
 const styles = StyleSheet.create({
   outerContainer: {
     flex: 1,
-    justifyContent: 'center',
+  },
+  wideButton:{
+    position: 'absolute',  // Set to absolute
+    top: 700,             // Set top
+    left: 25,             // Set left
     alignItems: 'center',
-    backgroundColor: 'lightgray',
-  },
-  headerText: {
-    fontSize: 24,
-    fontWeight: 'bold',
-  },
-  footerText: {
-    fontSize: 18,
-    color: 'orange',
+    justifyContent: 'center',
   },
 });
 

@@ -1,70 +1,48 @@
-import { View, Text, Image } from 'react-native';
-import React, { useState } from 'react';
-import styles from '../Components/styles';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import BoxInput from '../Components/BoxInput';
-import BoxInput2 from '../Components/BoxInput2';
-import BoxInput3 from '../Components/BoxInput3';
+import React from 'react';
+import { View, Image, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import BookingData from '../Components/BookingData';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import WideButton from '../Components/WideButton';
-import { Ionicons } from '@expo/vector-icons';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
   
-  const [fromCity, setFromCity] = useState('');
-  const [toCity, setToCity] = useState('');
-  const [departureDate, setDepartureDate] = useState('');
-  const [returnDate, setReturnDate] = useState('');
-
   const handleSearch = () => {
-    // Handle the registration logic here
-
-      navigation.navigate('SearchResult');
-   
+    navigation.navigate('SearchResult');
   };
 
-
   return (
-    <SafeAreaView>
-      <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.imageContainer}>
         <Image source={require('../Images/Top.png')} style={styles.HomeImage}/>
-        <View>
-          <BoxInput
-            value={fromCity}
-            placeholder="From City"
-            onChangeText={(text) => setFromCity(text)}
-          />
-          <BoxInput2
-            value={toCity}
-            placeholder="To City"
-            onChangeText={(text) => setToCity(text)}
-          />
-            
-          <View style={styles.inputDateRow}>
-            <BoxInput3
-              value={departureDate}
-              placeholder="Fri 6 Oct"
-              onChangeText={(text) => setDepartureDate(text)}
-            />
-            <BoxInput3
-              value={returnDate}
-              placeholder="Add Return Date"
-              onChangeText={(text) => setReturnDate(text)}
-            />
-          </View>
-            
-          <View style={styles.inputDateRow}>
-            <Text style={styles.passengerText}>Passenger</Text>
-            <Ionicons name="person-outline" size={24} color="#B0B0B0" />
-          </View>
-         
-           <WideButton title="Search" onPress={handleSearch}/>
-
-        </View>
+      </View>
+      <BookingData handleSearch={handleSearch} />
+      <View style={styles.Button}>
+      <WideButton title= "Search Bus" onPress={handleSearch} />
       </View>
     </SafeAreaView>
-  )
+
+  );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  imageContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  HomeImage: {
+    width: '100%',
+    height: 200,
+    resizeMode: 'cover',
+    marginBottom: 10
+  },
+  Button:{
+    alignItems: 'center',
+  }
+});
 
 export default HomeScreen;

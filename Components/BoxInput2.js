@@ -5,26 +5,13 @@ import { Ionicons } from '@expo/vector-icons';
 const BoxInput = ({ value, placeholder, onChangeText }) => {
   return (
     <View style={{
-      backgroundColor: '#EAEAEA',
+      borderWidth: 1,
+      borderColor: '#FF7927',
       borderRadius: 5,
       marginTop: 10,
-      width: 360,
+      width: 370,
       height: 60,
       position: 'relative',
-      ...Platform.select({
-        ios: {
-          shadowColor: "#000",
-          shadowOffset: {
-            width: 0,
-            height: 2,
-          },
-          shadowOpacity: 0.23,
-          shadowRadius: 2.62,
-        },
-        android: {
-          elevation: 4,
-        },
-      }),
     }}>
       
       {/* Location Icon */}

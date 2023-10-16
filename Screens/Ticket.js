@@ -34,26 +34,31 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    padding: 20,
   },
   header: {
+    backgroundColor: '#FF7927',
+    width: '100%',
+    padding: 20,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 20,
   },
   headerText: {
+    marginLeft: 10,
+    marginTop: 20,
     fontSize: 24,
     fontWeight: 'bold',
   },
   buttonContainer: {
     flexDirection: 'row',
     marginBottom: 40,
+    padding: 20,
   },
   activeButton: {
     flex: 1,
     padding: 15,
-    backgroundColor: 'orange',
+    backgroundColor: '#FF7927',
     marginRight: 10,
     borderRadius: 10,
   },

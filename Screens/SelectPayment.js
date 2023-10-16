@@ -28,7 +28,8 @@ const SelectPayment = () => {
          <Text style={styles.text2}>Please select a mobile network</Text>
           <View style={{marginTop: 10}}>
           <View style={styles.passengerDetailsContainer}>
-            <TouchableOpacity>
+      
+      <TouchableOpacity>
       <View style={styles.textContainer}>
         <Text style={styles.text}>Mpesa</Text>
         <MaterialIcons name="keyboard-arrow-right" size={18} color="black" />

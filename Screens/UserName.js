@@ -62,15 +62,15 @@ const route = useRoute(); // Use useRoute to get the route params
       </View>
     
     <View style={styles.textContainer}>
-    <Text style={styles.headerText}>Wasifu</Text>
-    <Text style={styles.descriptText}>Majina yako sahihi yatakuwezesha kutambulika na kuaminika kirahisi na vijumbe pamoja na memba wengine</Text>
+    <Text style={styles.headerText}>Enter user name</Text>
+    <Text style={styles.descriptText}>Write your name for easy ticket processing</Text>
     </View>
     
     <View style={{alignItems: 'center'}}>
     <View style={styles.textInput}>
         <CustomTextInput
           value={phoneNumber}
-          placeholder="Andika jina lako"
+          placeholder="Enter name"
           onChangeText={(text) => setPhoneNumber(text)}
         />
       </View>
@@ -79,7 +79,7 @@ const route = useRoute(); // Use useRoute to get the route params
         <Button
           title={
             <>
-              Hifadhi{' '}
+              Save{' '}
             </>
           }
           onPress={handleRegistration}

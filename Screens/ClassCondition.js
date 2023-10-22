@@ -6,6 +6,7 @@ import FareCondition from '../Components/FareCondition'
 import TicketNo from '../Components/TicketNo'
 import WideButton from '../Components/WideButton'
 import { useNavigation } from '@react-navigation/native';
+import { ScrollView } from 'react-native'
 
 const ClassCondition = () => {
 
@@ -17,7 +18,7 @@ const ClassCondition = () => {
   };
 
   return (
-    <View>
+    <ScrollView>
      <PassengerContainer />
      <View style={styles.container}>
      <BusCondition />
@@ -31,7 +32,7 @@ const ClassCondition = () => {
      <View style={{alignItems: 'center', marginTop: 30}}>
      <WideButton title="Proceed" onPress={handleContinue} />
      </View>
-    </View>
+    </ScrollView>
   )
 }
 

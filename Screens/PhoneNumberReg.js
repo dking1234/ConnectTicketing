@@ -37,13 +37,13 @@ const PhoneNumberReg = () => {
       </View>
 
       <View style={styles.header}>
-        <Text style={styles.headerText}>Jisajili kucheza</Text>
+        <Text style={styles.headerText}>Register your account</Text>
       </View>
 
       <View style={styles.textInput}>
         <CustomTextInput
           value={phoneNumber}
-          placeholder="Weka namba ya simu kucheza"
+          placeholder="Enter Phone Number"
           onChangeText={(text) => setPhoneNumber(text)}
         />
       </View>
@@ -55,8 +55,8 @@ const PhoneNumberReg = () => {
         />
         <TouchableOpacity>
         <Text style={styles.checkboxText}>
-          Nimekubali{' '}
-          <Text style={styles.linkText}>Vigezo na Masharti</Text>.
+          I have accept{' '}
+          <Text style={styles.linkText}>Terms and conditions</Text>.
         </Text>
         </TouchableOpacity>
       </View>
@@ -65,7 +65,7 @@ const PhoneNumberReg = () => {
         <Button
           title={
             <>
-              Endelea{' '}
+              Continue{' '}
               <Icon name="arrow-right" size={16} color="white" />{/* Add the arrow icon */}
             </>
           }

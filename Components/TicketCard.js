@@ -94,28 +94,28 @@ const styles = StyleSheet.create({
         width:'60%'
       },
       ticketText: {
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: 'bold',
         color: 'black',
         backgroundColor: 'transparent',
         paddingTop: 75, // Add some padding to move text a bit away from the top edge
       },
       ticketTextId: {
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: 'bold',
         color: 'black',
         backgroundColor: 'transparent',
         marginTop: 40, // Add some padding to move text a bit away from the top edge
       },
       ticketText1: {
-        fontSize: 18,
+        fontSize: 14,
         fontWeight: 'bold',
         color: 'black',
         backgroundColor: 'transparent',
         marginBottom: 10
       },
       ticketText2: {
-        fontSize: 18,
+        fontSize: 14,
         fontWeight: '400',
         color: 'black',
         backgroundColor: 'transparent',

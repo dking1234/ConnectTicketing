@@ -19,8 +19,8 @@ const PassengerContainer = () => {
           </View>
           <View style={styles.borderBackground}>
             <View style={styles.rowIcon}>
-            <Icon name="ticket" size={20} color="#000" />
-            <Text>Your ticket information will be sent to: 0620229713</Text>
+            <Icon name="ticket" size={20} color="#000" style={{marginHorizontal: 10}}/>
+            <Text style={{fontSize: 13}}>Your ticket information will be sent to: 0620229713</Text>
             </View>
           </View>
         </View>

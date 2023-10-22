@@ -63,8 +63,8 @@ const route = useRoute(); // Use useRoute to get the route params
       </View>
     
     <View style={styles.textContainer}>
-    <Text style={styles.headerText}>Thibitisha namba</Text>
-    <Text style={styles.descriptText}>Namba ya uthibitisho imetuma kwenda ********83. Ingiza namba kukamilisha usajili</Text>
+    <Text style={styles.headerText}>Verify Phone number</Text>
+    <Text style={styles.descriptText}>The verification have been sent to ********83. Enter code to verify</Text>
     </View>
     
     <View style={{alignItems: 'center'}}>
@@ -87,7 +87,7 @@ const route = useRoute(); // Use useRoute to get the route params
         <Button
           title={
             <>
-              Endelea{' '}
+              Continue{' '}
               <Icon name="arrow-right" size={16} color="white" />{/* Add the arrow icon */}
             </>
           }
@@ -98,8 +98,8 @@ const route = useRoute(); // Use useRoute to get the route params
 
       <TouchableOpacity>
       <Text style={styles.checkboxText}>
-          Sijapokea ujumbe,{' '}
-          <Text style={styles.linkText}>Tuma tena</Text>.
+          Didn't get codes,{' '}
+          <Text style={styles.linkText}>Resend</Text>.
         </Text>
       </TouchableOpacity>
 

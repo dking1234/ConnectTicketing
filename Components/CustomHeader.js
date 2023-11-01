@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+
 
 const CustomHeader = ({ navigation }) => {
     return (
@@ -26,12 +28,14 @@ const CustomHeader = ({ navigation }) => {
 const styles = StyleSheet.create({
     headerContainer: {
         flexDirection: 'row',
-        height: 80,
+        height: 100,
         backgroundColor: '#FF7927',
         justifyContent: 'center',
         alignItems: 'center',
     },
     leftIcon: {
+        // backgroundColor: 'red',
+        padding: 10,
         marginTop: 10,
         position: 'absolute',
         left: 10,
@@ -42,12 +46,14 @@ const styles = StyleSheet.create({
         right: 10,
     },
     headerTitle: {
+        marginLeft: 30,
         marginTop: 10,
         fontWeight: 'bold',
         fontSize: 18,
         color: '#fff',
     },
     headerTitle2: {
+        marginLeft: 30,
         fontWeight: '300',
         fontSize: 14,
         color: '#fff',
@@ -55,8 +61,6 @@ const styles = StyleSheet.create({
     textHeaderView:{
         flexDirection: 'column',
         marginRight: 150,
-
-
     }
 });
 

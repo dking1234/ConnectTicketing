@@ -65,14 +65,14 @@ const BottomTab = () => {
                   fontSize: 12,
               },
               tabBarItemStyle: {
-                  paddingVertical: 5,
+                marginBottom: 10,
               },
               tabBarStyle: [
                   {
                       display: 'flex',
                       backgroundColor: '#f2f2f2',
                       borderTopColor: '#d1d1d1',
-                      height: 60,
+                      height: 80,
                       alignItems: 'center',
                   },
                   null

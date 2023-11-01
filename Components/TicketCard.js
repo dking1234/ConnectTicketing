@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, ImageBackground, Text } from 'react-native';
+import MyQRCodeComponent from './MyQRCodeComponent';
 
 const TicketCard = () => {
   return (
@@ -66,6 +67,7 @@ const TicketCard = () => {
       </View>
       </View>
       <Text style={styles.ticketTextId}>ID 506-53</Text>
+      <MyQRCodeComponent style={styles.qrCodePositioning} />
     </ImageBackground>
   </View>
   );
@@ -105,24 +107,24 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: 'black',
         backgroundColor: 'transparent',
-        marginTop: 40, // Add some padding to move text a bit away from the top edge
+        marginTop: 60, // Add some padding to move text a bit away from the top edge
       },
       ticketText1: {
-        fontSize: 14,
+        fontSize: 16,
         fontWeight: 'bold',
         color: 'black',
         backgroundColor: 'transparent',
         marginBottom: 10
       },
       ticketText2: {
-        fontSize: 14,
+        fontSize: 16,
         fontWeight: '400',
         color: 'black',
         backgroundColor: 'transparent',
         marginLeft: 20
       },
       ticketText3: {
-        fontSize: 14,
+        fontSize: 16,
         fontWeight: '400',
         color: 'black',
         backgroundColor: 'transparent',

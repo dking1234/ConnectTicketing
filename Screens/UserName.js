@@ -70,10 +70,16 @@ const route = useRoute(); // Use useRoute to get the route params
     <View style={styles.textInput}>
         <CustomTextInput
           value={phoneNumber}
-          placeholder="Enter name"
+          placeholder="Enter first name"
+          onChangeText={(text) => setPhoneNumber(text)}
+        />
+           <CustomTextInput
+          value={phoneNumber}
+          placeholder="Enter second name"
           onChangeText={(text) => setPhoneNumber(text)}
         />
       </View>
+      
        
           <View style={styles.buttonContainer}>
         <Button

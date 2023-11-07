@@ -1,6 +1,5 @@
-import { View, Text, Image, StyleSheet } from 'react-native';
+import { View, Text, Image, StyleSheet, SafeAreaView } from 'react-native';
 import React from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import BackButton from '../Components/BackButton';
 import WideButton from '../Components/WideButton';
 import { useNavigation } from '@react-navigation/native';

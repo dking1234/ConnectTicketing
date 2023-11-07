@@ -1,33 +1,21 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import BoxInput from './BoxInput';
-import BoxInput2 from './BoxInput2';
-import CalendarPicker from 'react-native-calendar-picker';
+import BoxInput2 from './BoxInput2';import CalendarPicker from 'react-native-calendar-picker';
+import MyDateTimePicker from './MyDateTimePicker';
 
 const BookingData = ({ handleSearch }) => {
   const [fromCity, setFromCity] = useState('');
   const [toCity, setToCity] = useState('');
-  const [departureDate, setDepartureDate] = useState('');
-  const [returnDate, setReturnDate] = useState('');
   const [passengers, setPassengers] = useState(1);
 
-  const handleDatePress = () => {
-    // Trigger calendar popup here
-  };
 
   return (
     <View style={styles.bookingContainer}>
       <BoxInput value={fromCity} onChangeText={setFromCity} placeholder="From City" style={styles.input} />
       <BoxInput2 value={toCity} onChangeText={setToCity} placeholder="To City" style={styles.input} />
-      <View style={styles.dateContainer}>
-        <TouchableOpacity onPress={handleDatePress} style={styles.dateButton}>
-          <Text style={styles.dropdownText}>Departure: {departureDate || 'Choose Date'}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleDatePress} style={styles.returnButton}>
-          <Text style={styles.returnText}>{returnDate || '+ Add return'}</Text>
-        </TouchableOpacity>
-      </View>
+      <MyDateTimePicker />
       <View style={styles.passengerRow}>
       <View style={styles.passengerIcon}>
                 <Text style={styles.passengerText}>Passengers:</Text>

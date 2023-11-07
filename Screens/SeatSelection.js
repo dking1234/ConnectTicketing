@@ -1,7 +1,6 @@
 import React from 'react';
-import { View } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import SelectSeat from '../Components/SelectSeat';
-import { StyleSheet } from 'react-native';
 
 const SeatSelection = () => {
     return (

@@ -1,9 +1,8 @@
 import React from 'react';
-import { View, Image, StyleSheet,Text } from 'react-native';
+import { View, Image, StyleSheet,Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { TouchableOpacity } from 'react-native';
 
 const Profile = () => {
   const navigation = useNavigation();

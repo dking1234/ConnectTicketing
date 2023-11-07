@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, Alert } from 'react-native'; // Import Alert from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { View, Text, StyleSheet, Image, Alert, TouchableOpacity, SafeAreaView } from 'react-native'; // Import Alert from 'react-native'
 import CheckBox from 'react-native-check-box';
 import CustomTextInput from '../Components/CustomTextInput';
 import Button from '../Components/Button';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native'; 
-import { TouchableOpacity } from 'react-native-gesture-handler';
+
 
 const PhoneNumberReg = () => {
   const navigation = useNavigation();

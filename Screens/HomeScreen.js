@@ -1,8 +1,7 @@
 import React from 'react';
-import { View, Image, StyleSheet } from 'react-native';
+import { View, Image, StyleSheet, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import BookingData from '../Components/BookingData';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import WideButton from '../Components/WideButton';
 
 const HomeScreen = () => {

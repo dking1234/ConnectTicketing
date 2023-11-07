@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, ScrollView  } from 'react-native'
 import React from 'react'
 import PassengerContainer from '../Components/PassengerContainer'
 import BusCondition from '../Components/BusCondition'
@@ -6,7 +6,6 @@ import FareCondition from '../Components/FareCondition'
 import TicketNo from '../Components/TicketNo'
 import WideButton from '../Components/WideButton'
 import { useNavigation } from '@react-navigation/native';
-import { ScrollView } from 'react-native'
 
 const ClassCondition = () => {
 

@@ -1,7 +1,6 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import React from 'react'
 import { MaterialIcons } from '@expo/vector-icons';
-import { StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 const SelectPayment = () => {

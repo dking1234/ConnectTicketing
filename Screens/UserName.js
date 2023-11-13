@@ -1,61 +1,61 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Image, SafeAreaView } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { View, Text, StyleSheet, TextInput, Image, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import BackButton from '../Components/BackButton';
 import Button from '../Components/Button';
 import CustomTextInput from '../Components/CustomTextInput';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const UserName = () => {
 
 const navigation = useNavigation();
 
-const [otpValues, setOtpValues] = useState(['', '', '', '']);
-const [error, setError] = useState(null); // State variable for error message
+const [firstName, setFirstName] = useState('');
+const [lastName, setLastName] = useState('');
+const [error, setError] = useState('');
 const [isLoading, setIsLoading] = useState(false);
 
-const inputRefs = [null, null, null, null];
 
-const handleOtpChange = (value, index) => {
-  if (value.length === 1 && index < 3) {
-    setOtpValues((prevValues) => {
-      const newValues = [...prevValues];
-      newValues[index] = value;
-      return newValues;
+
+const saveUsername = async () => {
+  setIsLoading(true);
+  try {
+    // Retrieve the phoneNumber from AsyncStorage
+    const phoneNumber = await AsyncStorage.getItem('phoneNumber');
+    
+    // Ensure phoneNumber is retrieved
+    if (!phoneNumber) {
+      throw new Error('Phone number not found. Please log in again.');
+    }
+
+    // Call the server endpoint to update the username
+    const response = await axios.post('http://172.20.10.3:3000/user/user-name', {
+      phoneNumber,
+      firstName,
+      lastName
     });
-    inputRefs[index + 1].focus();
-  } else if (value.length === 0 && index > 0) {
-    setOtpValues((prevValues) => {
-      const newValues = [...prevValues];
-      newValues[index] = value;
-      return newValues;
-    });
-    inputRefs[index - 1].focus();
-  } else {
-    setOtpValues((prevValues) => {
-      const newValues = [...prevValues];
-      newValues[index] = value;
-      return newValues;
-    });
+
+    // Check if the username update was successful
+    if (response.data.success) {
+      // Maybe navigate to another screen or update the state
+      navigation.navigate('MainStack', { screen: 'Tab', params: { screen: 'HomeScreen' } });
+
+    } else {
+      setError('Failed to update username.');
+    }
+  } catch (error) {
+    setError(error.message || 'An error occurred while updating the username.');
+  }finally {
+    setIsLoading(false); // Set loading state to false when done
   }
 };
-
-const route = useRoute(); // Use useRoute to get the route params
-  const phoneNumber = route.params?.phoneNumber || ''; // Get phoneNumber from route params
-
-  const handleRegistration = () => {
-    // Handle the registration logic here
-
-    navigation.navigate('MainStack', { screen: 'Tab', params: { screen: 'HomeScreen' } });
-
-  
-   
-  };
 
   return (
     <SafeAreaView style={styles.container}>
     
     <BackButton/>
-
+<ScrollView>
     <View style={styles.logoContainer}>
         <Image source={require('../Images/Connect.png')} style={styles.logo} />
       </View>
@@ -68,31 +68,34 @@ const route = useRoute(); // Use useRoute to get the route params
     <View style={{alignItems: 'center'}}>
     <View style={styles.textInput}>
         <CustomTextInput
-          value={phoneNumber}
+          value={firstName}
           placeholder="Enter first name"
-          onChangeText={(text) => setPhoneNumber(text)}
+          onChangeText={(text) => setFirstName(text)}
         />
            <CustomTextInput
-          value={phoneNumber}
+          value={lastName}
           placeholder="Enter second name"
-          onChangeText={(text) => setPhoneNumber(text)}
+          onChangeText={(text) => setLastName(text)}
         />
       </View>
       
-       
-          <View style={styles.buttonContainer}>
-        <Button
-          title={
-            <>
-              Save{' '}
-            </>
-          }
-          onPress={handleRegistration}
-          />
-      </View>
-
-          </View>
-
+      {error ? <Text style={{ color: 'red' }}>{error}</Text> : null}
+      {isLoading ? ( // Render loading indicator if isLoading is true
+            <ActivityIndicator size="large" color="#14684E" />
+          ) : (
+            <View style={styles.buttonContainer}>
+              <Button
+                title={
+                  <>
+                    Save{' '}
+                  </>
+                }
+                onPress={saveUsername}
+              />
+            </View>
+          )}
+        </View>
+          </ScrollView>
     </SafeAreaView>
   );
 };

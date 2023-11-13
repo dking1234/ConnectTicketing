@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import BoxInput from './BoxInput';
-import BoxInput2 from './BoxInput2';import CalendarPicker from 'react-native-calendar-picker';
+import BoxInput2 from './BoxInput2';
 import MyDateTimePicker from './MyDateTimePicker';
 
 const BookingData = ({ handleSearch }) => {

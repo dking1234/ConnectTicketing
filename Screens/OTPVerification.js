@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, TextInput, Image, TouchableOpacity, ActivityIndicator, SafeAreaView } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import BackButton from '../Components/BackButton';
 import Button from '../Components/Button';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const OTP = () => {
 
@@ -39,17 +41,38 @@ const handleOtpChange = (value, index) => {
   }
 };
 
-const route = useRoute(); // Use useRoute to get the route params
-  const phoneNumber = route.params?.phoneNumber || ''; // Get phoneNumber from route params
+const verifyOtp = async () => {
+  const otp = otpValues.join('');
+  setIsLoading(true);
+  try {
+    // Retrieve the phoneNumber from AsyncStorage
+    const phoneNumber = await AsyncStorage.getItem('phoneNumber');
+    
+    // Ensure phoneNumber is retrieved
+    if (!phoneNumber) {
+      throw new Error('Phone number not found');
+    }
 
-  const handleRegistration = () => {
-    // Handle the registration logic here
+    const response = await axios.post('http://172.20.10.3:3000/verify/verify-otp', {
+      phoneNumber,
+      otp,
+    });
 
-      navigation.navigate('UserName');
-      // User has agreed to the terms and conditions, proceed with registration
-      // ... your registration logic here ...
-   
-  };
+    // Check if the OTP verification was successful
+    if (response.data.success) {
+      // If so, navigate to the 'UserName' screen
+      navigation.navigate('UserName', { phoneNumber });
+    } else {
+      // If not, set the error state with the message from the response or a default message
+      setError(response.data.message || 'Invalid OTP.');
+    }
+  } catch (error) {
+    // Error handling remains the same...
+    // ...
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <SafeAreaView style={styles.container}>
@@ -82,15 +105,19 @@ const route = useRoute(); // Use useRoute to get the route params
           {error && <Text style={styles.errorText}>{error}</Text>}
 
           <View style={styles.buttonContainer}>
-        <Button
-          title={
-            <>
-              Continue{' '}
-              <Icon name="arrow-right" size={16} color="white" />{/* Add the arrow icon */}
-            </>
-          }
-          onPress={handleRegistration}
+        {isLoading ? (
+          <ActivityIndicator size="large" color="white" />
+        ) : (
+          <Button
+            title={
+              <>
+                Endelea{' '}
+                <Icon name="arrow-right" size={16} color="white" />
+              </>
+            }
+            onPress={verifyOtp}
           />
+        )}
       </View>
 
 

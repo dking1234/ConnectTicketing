@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Button, Platform, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { View, TouchableOpacity, Text, Platform, StyleSheet } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 const MyDateTimePicker = () => {
@@ -8,11 +8,22 @@ const MyDateTimePicker = () => {
   const [show, setShow] = useState(false);
   const [departureDate, setDepartureDate] = useState('');
   const [returnDate, setReturnDate] = useState('');
+  const [showReturnPicker, setShowReturnPicker] = useState(false);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === 'ios');
     setDate(currentDate);
+
+    // Format the selected date as a string (you can adjust the format as needed)
+    const formattedDate = currentDate.toLocaleDateString('en-US');
+    setDepartureDate(formattedDate);
+  };
+
+  const onChangeReturn = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShowReturnPicker(Platform.OS === 'ios');
+    setReturnDate(currentDate.toLocaleDateString('en-US'));
   };
 
   const showMode = (currentMode) => {
@@ -24,18 +35,18 @@ const MyDateTimePicker = () => {
     showMode('date');
   };
 
-  const showTimepicker = () => {
-    showMode('time');
+  const showReturnDatepicker = () => {
+    setShowReturnPicker(true);
   };
 
   return (
-    <View>
-            <View style={styles.dateContainer}>
+    <View style={styles.bookingContainer}>
+      <View style={styles.dateContainer}>
         <TouchableOpacity onPress={showDatepicker} style={styles.dateButton}>
           <Text style={styles.dropdownText}>Departure: {departureDate || 'Choose Date'}</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={showDatepicker} style={styles.returnButton}>
-          <Text style={styles.returnText}>{returnDate || '+ Add return'}</Text>
+        <TouchableOpacity onPress={showReturnDatepicker} style={styles.returnButton}>
+          <Text style={styles.returnText}>Return: {returnDate || 'Choose Date'}</Text>
         </TouchableOpacity>
       </View>
       {show && (
@@ -48,96 +59,56 @@ const MyDateTimePicker = () => {
           onChange={onChange}
         />
       )}
+      {showReturnPicker && (
+        <DateTimePicker
+          testID="returnDateTimePicker"
+          value={new Date()}
+          mode="date"
+          is24Hour={true}
+          display="default"
+          onChange={onChangeReturn}
+        />
+      )}
     </View>
   );
 };
 
-export default MyDateTimePicker;
-
 const styles = StyleSheet.create({
-        bookingContainer: {
-          padding: 20,
-        },
-        input: {
-          borderWidth: 1,
-          borderColor: 'gray',
-          padding: 10,
-          marginBottom: 15,
-          borderRadius: 5,
-        },
-        dateContainer: {
-          flexDirection: 'row',
-          marginTop: 10,
-          justifyContent: 'space-between',
-        },
-        dateButton: {
-          flex: 1,
-          marginRight: 5,
-          borderWidth: 1,
-          borderColor: 'orange',
-          padding: 10,
-          marginBottom: 15,
-          borderRadius: 5,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-        },
-        returnButton: {
-          flex: 1,
-          marginLeft: 5,
-          borderWidth: 1,
-          borderColor: 'orange',
-          padding: 10,
-          marginBottom: 15,
-          borderRadius: 5,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-        },
-        searchButton: {
-          backgroundColor: 'orange',
-          padding: 10,
-          alignItems: 'center',
-          borderRadius: 5,
-        },
-        dropdownText: {
-          color: 'black',
-        },
-        passengerText:{
-          fontSize: 16,
-          fontWeight: '500'
-        },
-        numberText:{
-          fontSize: 20
-        },
-        returnText: {
-          color: 'gray',
-        },
-        passengerRow: {
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        },
-        counterButton: {
-          fontSize: 25,
-          fontWeight: 'bold',
-          marginHorizontal: 20,
-          color: '#FF7927'
-        },
-        counter:{
-          borderWidth: 1,
-          borderRadius: 5,
-          width: 175,
-          height: 40,
-          borderColor: '#FF7927',
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        },
-        passengerIcon:{
-          flexDirection: 'row', 
-          alignItems: 'center',
-          justifyContent: 'space-between',
-        },
-        icon:{
-          marginLeft: 50
-        }
-  });
+  bookingContainer: {
+    padding: 20,
+    alignItems: 'center',
+  },
+  dateContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '110%',
+  },
+  dateButton: {
+    flex: 1,
+    marginRight: 5,
+    borderWidth: 1,
+    borderColor: '#FF7927',
+    padding: 12,
+    borderRadius: 5,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  returnButton: {
+    flex: 1,
+    marginLeft: 5,
+    borderWidth: 1,
+    borderColor: '#FF7927',
+    padding: 12,
+    borderRadius: 5,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  dropdownText: {
+    color: 'black',
+  },
+  returnText: {
+    color: 'black',
+  },
+});
+
+export default MyDateTimePicker;

@@ -18,7 +18,10 @@ const PhoneNumberReg = () => {
   const handleCheck = (newValue) => {
     setIsChecked(newValue);
   };
-
+  const handleConfirm = () => {
+    // Navigate to ClassCondition screen
+    navigation.navigate('OTP');
+  };
   
   const handleRegistration = async () => { // Mark the function as async
     if (!phoneNumber) {
@@ -29,7 +32,7 @@ const PhoneNumberReg = () => {
     if (isChecked) {
       setIsLoading(true); // Set loading to true
       try {
-        const response = await axios.post('http://172.20.10.3:3000/user/phone-number', { phoneNumber });
+        const response = await axios.post('http://192.168.43.21:3000/user/phone-number', { phoneNumber });
         console.log(response.data.message);
         
         // Save phoneNumber to AsyncStorage
@@ -59,11 +62,12 @@ const PhoneNumberReg = () => {
       </View>
 
       <View style={styles.textInput}>
-        <CustomTextInput
-          value={phoneNumber}
-          placeholder="Enter Phone Number"
-          onChangeText={(text) => setPhoneNumber(text)}
-        />
+      <CustomTextInput
+        value={phoneNumber}
+        placeholder="Enter Phone Number"
+        onChangeText={(text) => setPhoneNumber(text)}
+        keyboardType="phone-pad"
+      />
       </View>
 
       <View style={styles.checkboxContainer}>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Image, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, Image, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import BackButton from '../Components/BackButton';
 import Button from '../Components/Button';
@@ -30,7 +30,7 @@ const saveUsername = async () => {
     }
 
     // Call the server endpoint to update the username
-    const response = await axios.post('http://172.20.10.3:3000/user/user-name', {
+    const response = await axios.post('http://192.168.43.21:3000/user/user-name', {
       phoneNumber,
       firstName,
       lastName
@@ -49,6 +49,11 @@ const saveUsername = async () => {
   }finally {
     setIsLoading(false); // Set loading state to false when done
   }
+};
+
+const handleConfirm = () => {
+  // Navigate to ClassCondition screen
+  navigation.navigate('MainStack', { screen: 'Tab', params: { screen: 'HomeScreen' } });
 };
 
   return (

@@ -1,21 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import BoxInput from './BoxInput';
-import BoxInput2 from './BoxInput2';
-import MyDateTimePicker from './MyDateTimePicker';
 
 const BookingData = ({ handleSearch }) => {
-  const [fromCity, setFromCity] = useState('');
-  const [toCity, setToCity] = useState('');
   const [passengers, setPassengers] = useState(1);
 
 
   return (
-    <View style={styles.bookingContainer}>
-      <BoxInput value={fromCity} onChangeText={setFromCity} placeholder="From City" style={styles.input} />
-      <BoxInput2 value={toCity} onChangeText={setToCity} placeholder="To City" style={styles.input} />
-      <MyDateTimePicker />
       <View style={styles.passengerRow}>
       <View style={styles.passengerIcon}>
                 <Text style={styles.passengerText}>Passengers:</Text>
@@ -34,7 +25,6 @@ const BookingData = ({ handleSearch }) => {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
   );
 };
 
@@ -90,7 +80,7 @@ const styles = StyleSheet.create({
     fontWeight: '500'
   },
   numberText:{
-    fontSize: 20
+    fontSize: 16
   },
   returnText: {
     color: 'gray',
@@ -99,6 +89,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    marginHorizontal: 20,
+    marginTop: -10,
   },
   counterButton: {
     fontSize: 25,

@@ -29,6 +29,9 @@ const saveUsername = async () => {
       throw new Error('Phone number not found. Please log in again.');
     }
 
+    // Save the firstName in AsyncStorage
+    await AsyncStorage.setItem('firstName', firstName);
+
     // Call the server endpoint to update the username
     const response = await axios.post('http://192.168.43.21:3000/user/user-name', {
       phoneNumber,
@@ -46,7 +49,7 @@ const saveUsername = async () => {
     }
   } catch (error) {
     setError(error.message || 'An error occurred while updating the username.');
-  }finally {
+  } finally {
     setIsLoading(false); // Set loading state to false when done
   }
 };

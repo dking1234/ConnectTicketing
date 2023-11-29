@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-const CitySearch = () => {
+const CitySearch = ({ onCitySelect }) => {
   const [origin, setOrigin] = useState('');
   const [destination, setDestination] = useState('');
   const [originResults, setOriginResults] = useState([]);
@@ -64,8 +64,13 @@ const CitySearch = () => {
       setDestination(city);
       setDestinationResults([]);
     }
-  };
 
+    // Call the prop function to pass the selected city to the parent
+    if (onCitySelect) {
+      onCitySelect(city, inputType);
+    }
+  };
+  
   const handleSwap = () => {
     const temp = origin;
     setOrigin(destination);

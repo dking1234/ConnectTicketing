@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, TouchableOpacity, Text, Platform, StyleSheet } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-const MyDateTimePicker = () => {
+const MyDateTimePicker = ({ onDateSelect, onReturnDateSelect }) => {
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
@@ -18,12 +18,22 @@ const MyDateTimePicker = () => {
     // Format the selected date as a string (you can adjust the format as needed)
     const formattedDate = currentDate.toLocaleDateString('en-US');
     setDepartureDate(formattedDate);
+
+    // Call the prop function to pass the selected date to the parent
+    onDateSelect(formattedDate, 'departureDate'); // Updated line
   };
 
   const onChangeReturn = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShowReturnPicker(Platform.OS === 'ios');
-    setReturnDate(currentDate.toLocaleDateString('en-US'));
+    setDate(currentDate);
+
+    // Format the selected date as a string (you can adjust the format as needed)
+    const formattedReturnDate = currentDate.toLocaleDateString('en-US');
+    setReturnDate(formattedReturnDate);
+
+    // Call the prop function to pass the selected return date to the parent
+    onReturnDateSelect(formattedReturnDate);
   };
 
   const showMode = (currentMode) => {

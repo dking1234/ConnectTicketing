@@ -1,40 +1,38 @@
+// Import necessary dependencies
 import React, { useEffect } from 'react';
-import { View, Text, ActivityIndicator } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
+import { View, ActivityIndicator, StyleSheet, Image } from 'react-native';
+import PropTypes from 'prop-types'; // Import PropTypes for type checking
 
 const SplashScreen = () => {
-  const navigation = useNavigation();
 
-  useEffect(() => {
-    const checkUserRegistration = async () => {
-      try {
-        // Check if user data is available in storage
-        const userData = await AsyncStorage.getItem('phoneNumber');
-
-        if (userData) {
-          // User is registered, navigate to home page
-          navigation.replace('Home'); // Replace with the actual home screen name
-        } else {
-          // User is not registered, navigate to registration screen
-          navigation.replace('Registration'); // Replace with the actual registration screen name
-        }
-      } catch (error) {
-        console.error('Error checking user registration:', error);
-        // Handle error as needed
-      }
-    };
-
-    // Check user registration on component mount
-    checkUserRegistration();
-  }, [navigation]);
-
-  return (
-    <View>
-      <Text>Loading...</Text>
-      <ActivityIndicator size="large" />
-    </View>
-  );
+return (
+<View style={styles.container}>
+<View style={styles.logoContainer}>
+<Image source={require('../Images/Connect.png')} style={styles.logo} />
+</View>
+<ActivityIndicator size="large" />
+</View>
+);
 };
+
+SplashScreen.propTypes = {
+navigation: PropTypes.object, // Type check for navigation prop
+};
+
+const styles = StyleSheet.create({
+container: {
+flex: 1,
+alignItems: 'center',
+},
+logoContainer: {
+alignItems: 'center',
+},
+logo: {
+width: 300,
+height: 300,
+marginTop: 250,
+resizeMode: 'contain',
+},
+});
 
 export default SplashScreen;

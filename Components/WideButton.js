@@ -1,9 +1,13 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
 
-const WideButton = ({ title, onPress }) => {
+const WideButton = ({ title, onPress, disabled }) => {
   return (
-    <TouchableOpacity style={styles.button} onPress={onPress}>
+    <TouchableOpacity
+      style={[styles.button, disabled && styles.disabledButton]}
+      onPress={onPress}
+      disabled={disabled}
+    >
       <Text style={styles.buttonText}>{title}</Text>
     </TouchableOpacity>
   );
@@ -24,6 +28,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     shadowRadius: 2,
     elevation: 4, // Add elevation for Android
+  },
+  disabledButton: {
+    backgroundColor: 'rgba(255, 121, 39, 0.5)', // Change the opacity as needed
   },
   buttonText: {
     color: 'white',

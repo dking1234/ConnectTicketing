@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 import { setTripDetails } from '../redux/actions/tripActions';
 
-const CitySearch = ({ dispatch, onCitySelect }) => {
+const CitySearch = ({ dispatch, onCitySelect, setIsCitySearchFilled }) => {
   const [origin, setOrigin] = useState('');
   const [destination, setDestination] = useState('');
   const [originResults, setOriginResults] = useState([]);
@@ -73,6 +73,7 @@ const CitySearch = ({ dispatch, onCitySelect }) => {
     // Call the prop function to pass the selected city to the parent
     if (onCitySelect) {
       onCitySelect(city, inputType);
+      setIsCitySearchFilled(true); // Set the state variable
     }
   };
   

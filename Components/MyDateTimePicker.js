@@ -4,7 +4,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { connect } from 'react-redux';
 import { setTripDetails } from '../redux/actions/tripActions';
 
-const MyDateTimePicker = ({ dispatch, onDateSelect, onReturnDateSelect, origin, destination }) => {
+const MyDateTimePicker = ({ dispatch, onDateSelect, onReturnDateSelect, origin, destination, setIsDateTimePickerFilled }) => {
 
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
@@ -25,6 +25,7 @@ const MyDateTimePicker = ({ dispatch, onDateSelect, onReturnDateSelect, origin, 
     dispatch(setTripDetails(origin, destination, formattedDate));
     // Call the prop function to pass the selected date to the parent
     onDateSelect(formattedDate, 'departureDate');// Updated line
+    setIsDateTimePickerFilled(true); // Set the state variable
   };
 
   const onChangeReturn = (event, selectedDate) => {
@@ -39,6 +40,7 @@ const MyDateTimePicker = ({ dispatch, onDateSelect, onReturnDateSelect, origin, 
     dispatch(setTripDetails({ origin, destination, returnDate: formattedReturnDate }));
     // Call the prop function to pass the selected return date to the parent
     onReturnDateSelect(formattedReturnDate);
+    setIsDateTimePickerFilled(true); // Set the state variable
   };
 
   const showMode = (currentMode) => {

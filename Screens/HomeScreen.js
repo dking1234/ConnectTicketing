@@ -79,10 +79,10 @@ const HomeScreen = () => {
           <ActivityIndicator size="large" color="white" /> // Show loading spinner when isLoading is true
         ) : (
           <WideButton
-            title="Search Bus"
-            onPress={handleConfirm}
-            disabled={!isCitySearchFilled || !isDateTimePickerFilled}
-          />
+          title="Search Bus"
+          onPress={handleConfirm}
+          disabled={!isCitySearchFilled || !isDateTimePickerFilled}
+        />
         )}
       </View>
       <AdsSpace />

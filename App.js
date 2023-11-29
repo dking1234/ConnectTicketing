@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Provider } from 'react-redux';
+import store from './redux/store';
 import RegistrationNav from './Navigation/RegistrationNav';
 import MainStack from './Navigation/MainStack';
 import SplashScreen from './Screens/SplashScreen';
@@ -49,16 +51,19 @@ return () => clearTimeout(splashTimer);
 
 // Wrap your NavigationContainer with a conditional rendering of SplashScreen
 return (
-<NavigationContainer>
-{/* Conditional rendering of SplashScreen */}
-{showSplash ? (
-<SplashScreen />
+<Provider store={store}>
+  <NavigationContainer>
+  {/* Conditional rendering of SplashScreen */}
+  {showSplash ? (
+    <SplashScreen />
+
 ) : (
 <Stack.Navigator initialRouteName={initialRoute} screenOptions={{ headerShown: false }}>
-<Stack.Screen name="Registration" component={RegistrationNav} />
-<Stack.Screen name="MainStack" component={MainStack} />
+    <Stack.Screen name="Registration" component={RegistrationNav} />
+    <Stack.Screen name="MainStack" component={MainStack} />
 </Stack.Navigator>
 )}
 </NavigationContainer>
+</Provider>
 );
 }

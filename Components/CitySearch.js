@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { connect } from 'react-redux';
+import { setTripDetails } from '../redux/actions/tripActions';
 
-const CitySearch = ({ onCitySelect }) => {
+const CitySearch = ({ dispatch, onCitySelect }) => {
   const [origin, setOrigin] = useState('');
   const [destination, setDestination] = useState('');
   const [originResults, setOriginResults] = useState([]);
@@ -64,6 +66,9 @@ const CitySearch = ({ onCitySelect }) => {
       setDestination(city);
       setDestinationResults([]);
     }
+
+    // Dispatch the action to update Redux store
+    dispatch(setTripDetails(origin, destination));
 
     // Call the prop function to pass the selected city to the parent
     if (onCitySelect) {
@@ -233,4 +238,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CitySearch;
+export default connect()(CitySearch);

@@ -1,9 +1,15 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { connect } from 'react-redux';
 
-const CustomHeader = ({ navigation, origin, destination, departureDate }) => {
+const CustomHeader = ({ navigation, trip }) => {
+  console.log('Trip data:', trip); // Log the entire trip object
+  const { origin, destination, departureDate } = trip;
+  console.log('Origin:', origin);
+  console.log('Destination:', destination);
+  console.log('Departure Date:', departureDate);
+
   return (
     <View style={styles.headerContainer}>
       {/* Back Icon */}
@@ -62,4 +68,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CustomHeader;
+const mapStateToProps = (state) => ({
+  trip: state.trip,
+});
+
+export default connect(mapStateToProps)(CustomHeader);

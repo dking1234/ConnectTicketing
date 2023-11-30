@@ -1,30 +1,39 @@
+// BookingData.js
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { connect } from 'react-redux'; // Import connect
+import { setPassengers } from '../redux/actions/passengerActions';
 
-const BookingData = ({ handleSearch }) => {
-  const [passengers, setPassengers] = useState(1);
+const BookingData = ({ setPassengers }) => {
 
+  const [passengers, setPassengersLocal] = useState(1);
+
+  const handlePassengerChange = (newPassengerCount) => {
+    setPassengersLocal(newPassengerCount);
+    // Dispatch the action to update the state in Redux
+    setPassengers(newPassengerCount);
+  };
 
   return (
-      <View style={styles.passengerRow}>
+    <View style={styles.passengerRow}>
       <View style={styles.passengerIcon}>
-                <Text style={styles.passengerText}>Passengers:</Text>
-                <View style={styles.icon}>
-                {passengers === 1 && <Ionicons name="md-person" size={18} color="black" />}
-                {passengers > 1 && <Ionicons name="md-people" size={24} color="black" />}
-                </View> 
-            </View>
-        <View style={styles.counter}>
-          <TouchableOpacity onPress={() => setPassengers(prev => Math.max(1, prev - 1))}>
-            <Text style={styles.counterButton}>-</Text>
-          </TouchableOpacity>
-          <Text style={styles.numberText}>{passengers}</Text>
-          <TouchableOpacity onPress={() => setPassengers(prev => prev + 1)}>
-            <Text style={styles.counterButton}>+</Text>
-          </TouchableOpacity>
+        <Text style={styles.passengerText}>Passengers:</Text>
+        <View style={styles.icon}>
+          {passengers === 1 && <Ionicons name="md-person" size={18} color="black" />}
+          {passengers > 1 && <Ionicons name="md-people" size={24} color="black" />}
         </View>
       </View>
+      <View style={styles.counter}>
+      <TouchableOpacity onPress={() => handlePassengerChange(Math.max(1, passengers - 1))}>
+        <Text style={styles.counterButton}>-</Text>
+      </TouchableOpacity>
+      <Text style={styles.numberText}>{passengers}</Text>
+      <TouchableOpacity onPress={() => handlePassengerChange(passengers + 1)}>
+        <Text style={styles.counterButton}>+</Text>
+      </TouchableOpacity>
+    </View>
+    </View>
   );
 };
 
@@ -118,4 +127,5 @@ const styles = StyleSheet.create({
   }
 });
 
-export default BookingData;
+export default connect(null, { setPassengers })(BookingData);
+

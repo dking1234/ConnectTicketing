@@ -1,10 +1,6 @@
-import { createStore, combineReducers } from 'redux';
-import tripReducer from './reducers/tripReducer';
-
-const rootReducer = combineReducers({
-  trip: tripReducer,
-  // Add other reducers here if needed
-});
+// store.js
+import { createStore } from 'redux';
+import rootReducer from './reducers'; // Assuming your reducers are in a folder named 'reducers'
 
 const store = createStore(rootReducer);
 

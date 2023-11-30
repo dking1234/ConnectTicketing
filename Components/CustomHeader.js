@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 
-const CustomHeader = ({ navigation, trip }) => {
+const CustomHeader = ({ navigation, trip, passengers  }) => {
   console.log('Trip data:', trip); // Log the entire trip object
   const { origin, destination, departureDate } = trip;
   console.log('Origin:', origin);
@@ -19,7 +19,12 @@ const CustomHeader = ({ navigation, trip }) => {
 
       <View style={styles.textHeaderView}>
         <Text style={styles.headerTitle}>{`${origin}-${destination}`}</Text>
+        <View style={styles.datePassenger}>
         <Text style={styles.headerTitle2}>{departureDate ? departureDate : ''}</Text>
+        <Text style={styles.headerTitle2}>
+      {passengers && passengers.count ? `${passengers.count} passenger` : ''}
+    </Text>
+        </View>
       </View>
       
       {/* Share Icon */}
@@ -66,10 +71,17 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     marginRight: 200,
   },
+  datePassenger:{
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '80%',
+    marginLeft: 10
+  }
 });
 
 const mapStateToProps = (state) => ({
   trip: state.trip,
+  passengers: state.passengers,
 });
 
 export default connect(mapStateToProps)(CustomHeader);

@@ -7,8 +7,9 @@ import WideButton from '../Components/WideButton';
 import MyDateTimePicker from '../Components/MyDateTimePicker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AdsSpace from '../Components/AdsSpace';
+import { connect } from 'react-redux';
 
-const HomeScreen = () => {
+const HomeScreen = ({ passengers }) => {
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
   const [firstName, setFirstName] = useState('');
@@ -135,4 +136,8 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+const mapStateToProps = (state) => ({
+  passengers: state.passengers,
+});
+
+export default connect(mapStateToProps)(HomeScreen);

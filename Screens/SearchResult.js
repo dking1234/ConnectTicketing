@@ -1,54 +1,78 @@
-import React from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { ScrollView, StyleSheet, View, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import TouchableScale from 'react-native-touchable-scale'; // import this
+import TouchableScale from 'react-native-touchable-scale';
 import BusTripDetails from '../Components/BusTripDetails';
+import axios from 'axios';
 
-const busTrips = [
-  { id: 1, name: 'Trip 1' },
-  { id: 2, name: 'Trip 2' },
-  { id: 3, name: 'Trip 3' },
-  { id: 4, name: 'Trip 4' },
-  { id: 5, name: 'Trip 5' },
-  // ... other trips
-];
+const SearchResult = ({ route }) => {
+  const { origin, destination, departureDate } = route.params;
+  const [busTrips, setBusTrips] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const navigation = useNavigation();
 
-const SearchResult = () => {
-    const navigation = useNavigation();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.post('http://192.168.43.21:3000/api/bus-schedules/search', {
+          origin,
+          destination,
+          date: departureDate,
+        });
 
-    const handlePress = (tripName) => {
-      navigation.navigate('SeatSelection', { tripName });
+        setBusTrips(response.data);
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error fetching search results:', error);
+        setIsLoading(false);
+      }
     };
 
-    return (
-        <ScrollView style={styles.container}>
-        {busTrips.map((trip, index) => (
-            <View key={trip.id} style={index === busTrips.length - 1 ? styles.lastTrip : {}}>
-                <TouchableScale 
-                    activeScale={0.95}  // You can change this value for your own preference
-                    tension={50} // This prop will increase the spring effect
-                    friction={7} // This prop will make the effect smoother
-                    onPress={() => handlePress(trip.name)}
-                >
-                    <BusTripDetails name={trip.name} />
-                </TouchableScale>
-            </View>
-        ))}
-        </ScrollView>
-    );
-}
+    fetchData();
+  }, [origin, destination, departureDate]);
 
-// ... styles and export remain the same
+  const handlePress = (companyName, busId) => {
+    navigation.navigate('SeatSelection', { companyName, busId });
+  };
 
+  return (
+    <ScrollView style={styles.container}>
+      {isLoading ? (
+        <ActivityIndicator size="large" color="black" />
+      ) : (
+        busTrips.map((trip, index) => (
+          <View key={trip._id} style={index === busTrips.length - 1 ? styles.lastTrip : {}}>
+            <TouchableScale
+              activeScale={0.95}
+              tension={50}
+              friction={7}
+              onPress={() => handlePress(trip.bus?.company?.name || 'Unknown Company', trip.bus?._id)}
+            >
+              <BusTripDetails
+                companyName={trip.bus?.company?.name || 'Unknown Company'}
+                classType={trip.bus?.classType}
+                origin={trip.origin}
+                destination={trip.destination}
+                departureTime={trip.departureTime}
+                arrivalTime={trip.arrivalTime}
+                price={trip.price}
+              />
+            </TouchableScale>
+          </View>
+        ))
+      )}
+    </ScrollView>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, // Fills the available space
-    padding: 2, // Adds some padding around the content
-    backgroundColor: '#f5f5f5', // Optional background color for the container
+    flex: 1,
+    padding: 2,
+    backgroundColor: '#f5f5f5',
   },
   lastTrip: {
-    marginBottom: 20, // Add the desired margin for the last trip
+    marginBottom: 20,
   },
 });
 

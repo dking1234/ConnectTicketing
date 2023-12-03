@@ -1,29 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
-const seats = Array.from({ length: 50 }, (_, index) => ({
-  id: (index + 1).toString(),
-  available: Math.random() < 0.8,
-}));
-
-const SeatSelection = () => {
+const SeatSelection = ({ busId }) => {
+  console.log('Bus ID:', busId);
   const [selectedSeat, setSelectedSeat] = useState(null);
   const [showOverlay, setShowOverlay] = useState(false);
+  const [busDetails, setBusDetails] = useState(null);
+  const [seats, setSeats] = useState([]);
+
+  useEffect(() => {
+    const fetchBusDetails = async () => {
+      try {
+        const response = await axios.get(`http://192.168.43.21:3000/api/buses/${busId}`);
+        setBusDetails(response.data);
+
+        // Initialize seats based on the number of seats in busDetails
+        const initializedSeats = Array.from({ length: response.data.numberOfSeats }, (_, index) => ({
+          id: (index + 1).toString(),
+          available: Math.random() < 0.8, // Adjust this based on your logic
+        }));
+
+        setSeats(initializedSeats);
+      } catch (error) {
+        console.error('Error fetching bus details:', error);
+      }
+    };
+
+    if (busId) {
+      fetchBusDetails();
+    }
+  }, [busId]);
 
   const handleSeatSelection = (seatId) => {
     if (selectedSeat === seatId) {
-      setSelectedSeat(null); // Deselect the seat if already selected
-      setShowOverlay(false); // Hide overlay if no seat selected
+      setSelectedSeat(null);
+      setShowOverlay(false);
     } else {
-      setSelectedSeat(seatId); // Otherwise, select the new seat
-      setShowOverlay(true);  // Show overlay if a seat is selected
+      setSelectedSeat(seatId);
+      setShowOverlay(true);
     }
   };
 
   const navigation = useNavigation();
 
   const handleContinue = () => {
+    console.log("Bus ID:", busId);
     console.log("Seat selected:", selectedSeat);
     
     // Navigate to ClassCondition screen
@@ -51,32 +74,28 @@ const SeatSelection = () => {
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.seatsContainer}>
-          {Array.from({ length: seats.length / 4 }, (_, index) => index).map(row => (
-            <View style={[
-              styles.row,
-              row === Math.ceil(seats.length / 4) - 1 ? styles.lastRow : null
-            ]} key={row}>
-        
-            {seats.slice(row * 4, row * 4 + 4).map((seat, colIndex) => (
-              <View key={seat.id} style={colIndex === 2 ? styles.rightSeat : null}>
-                <TouchableOpacity
-                  style={[
-                    styles.seat,
-                    seat.available ? styles.available : styles.unavailable,
-                    seat.id === selectedSeat ? styles.selected : null,
-                  ]}
-                  onPress={() => {
-                    if (seat.available) handleSeatSelection(seat.id);
-                  }}
-                  disabled={!seat.available}
-                >
-                  <Text>{seat.id}</Text>
-                </TouchableOpacity>
-              </View>
-            ))}
-          </View>
-        ))}
-      </View>
+          {busDetails?.numberOfSeats && Array.from({ length: busDetails.numberOfSeats / 4 }, (_, rowIndex) => (
+            <View style={styles.row} key={rowIndex}>
+              {Array.from({ length: 4 }, (_, colIndex) => (
+                <View key={colIndex} style={colIndex === 2 ? styles.rightSeat : null}>
+                  <TouchableOpacity
+                    style={[
+                      styles.seat,
+                      seats[rowIndex * 4 + colIndex]?.available ? styles.available : styles.unavailable,
+                      seats[rowIndex * 4 + colIndex]?.id === selectedSeat ? styles.selected : null,
+                    ]}
+                    onPress={() => {
+                      if (seats[rowIndex * 4 + colIndex]?.available) handleSeatSelection(seats[rowIndex * 4 + colIndex]?.id);
+                    }}
+                    disabled={!seats[rowIndex * 4 + colIndex]?.available}
+                  >
+                    <Text>{seats[rowIndex * 4 + colIndex]?.id}</Text>
+                  </TouchableOpacity>
+                </View>
+              ))}
+            </View>
+          ))}
+        </View>
       </ScrollView>
 
       {showOverlay && (
@@ -88,6 +107,7 @@ const SeatSelection = () => {
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {

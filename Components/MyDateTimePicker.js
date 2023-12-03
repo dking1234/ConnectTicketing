@@ -18,13 +18,13 @@ const MyDateTimePicker = ({ dispatch, onDateSelect, onReturnDateSelect, origin, 
     setShow(Platform.OS === 'ios');
     setDate(currentDate);
 
-    // Format the selected date as a string (you can adjust the format as needed)
-    const formattedDate = currentDate.toLocaleDateString('en-US');
+    // Format the selected date as a string in the desired format
+    const formattedDate = currentDate.toISOString().split('T')[0];
     setDepartureDate(formattedDate);
 
     dispatch(setTripDetails(origin, destination, formattedDate));
     // Call the prop function to pass the selected date to the parent
-    onDateSelect(formattedDate, 'departureDate');// Updated line
+    onDateSelect(formattedDate, 'departureDate');
     setIsDateTimePickerFilled(true); // Set the state variable
   };
 
@@ -33,8 +33,8 @@ const MyDateTimePicker = ({ dispatch, onDateSelect, onReturnDateSelect, origin, 
     setShowReturnPicker(Platform.OS === 'ios');
     setDate(currentDate);
 
-    // Format the selected date as a string (you can adjust the format as needed)
-    const formattedReturnDate = currentDate.toLocaleDateString('en-US');
+    // Format the selected date as a string in the desired format
+    const formattedReturnDate = currentDate.toISOString().split('T')[0];
     setReturnDate(formattedReturnDate);
 
     dispatch(setTripDetails({ origin, destination, returnDate: formattedReturnDate }));

@@ -22,7 +22,7 @@ const CustomHeader = ({ navigation, trip, passengers  }) => {
         <View style={styles.datePassenger}>
         <Text style={styles.headerTitle2}>{departureDate ? departureDate : ''}</Text>
         <Text style={styles.headerTitle2}>
-      {passengers && passengers.count ? `${passengers.count} passenger` : ''}
+      {passengers && passengers.count ? `${passengers.count} passengers` : ''}
     </Text>
         </View>
       </View>

@@ -12,10 +12,6 @@ const calculateDuration = (departureTime, arrivalTime) => {
   const hours = duration.hours();
   const minutes = duration.minutes();
 
-  console.log('Departure Time:', departureMoment.format('YYYY-MM-DD HH:mm:ss'));
-  console.log('Arrival Time:', arrivalMoment.format('YYYY-MM-DD HH:mm:ss'));
-  console.log('Duration:', duration);
-
   // Format the duration in a more readable way
   const formattedDuration = [];
   if (hours > 0) {
@@ -27,7 +23,6 @@ const calculateDuration = (departureTime, arrivalTime) => {
 
   const result = formattedDuration.join(' ');
 
-  console.log('Formatted Duration:', result);
 
   return result;
 };

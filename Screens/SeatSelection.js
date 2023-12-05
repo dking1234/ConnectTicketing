@@ -4,12 +4,12 @@ import SelectSeat from '../Components/SelectSeat';
 
 const SeatSelection = ({ route }) => {
   // Destructure the necessary properties from route.params
-  const { busId } = route?.params || {};
+  const { busId, seatArrangement } = route?.params || {};
 
   return (
     <View style={styles.container}>
-      {/* Pass busId to the SelectSeat component */}
-      <SelectSeat busId={busId} />
+      {/* Pass busId and seatArrangement as props to the SelectSeat component */}
+      <SelectSeat busId={busId} seatArrangement={seatArrangement} />
     </View>
   );
 };

@@ -6,9 +6,6 @@ import { connect } from 'react-redux';
 const CustomHeader = ({ navigation, trip, passengers  }) => {
   console.log('Trip data:', trip); // Log the entire trip object
   const { origin, destination, departureDate } = trip;
-  console.log('Origin:', origin);
-  console.log('Destination:', destination);
-  console.log('Departure Date:', departureDate);
 
   return (
     <View style={styles.headerContainer}>

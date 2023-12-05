@@ -14,7 +14,7 @@ const SearchResult = ({ route }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.post('http://192.168.43.21:3000/api/bus-schedules/search', {
+        const response = await axios.post('http://172.20.10.13:3000/api/bus-schedules/search', {
           origin,
           destination,
           date: departureDate,
@@ -31,8 +31,9 @@ const SearchResult = ({ route }) => {
     fetchData();
   }, [origin, destination, departureDate]);
 
-  const handlePress = (companyName, busId) => {
-    navigation.navigate('SeatSelection', { companyName, busId });
+  const handlePress = (companyName, busId, seatArrangement) => {
+    console.log('Seat Arrangement:', seatArrangement);
+    navigation.navigate('SeatSelection', { companyName, busId, seatArrangement });
   };
 
   return (
@@ -46,7 +47,7 @@ const SearchResult = ({ route }) => {
               activeScale={0.95}
               tension={50}
               friction={7}
-              onPress={() => handlePress(trip.bus?.company?.name || 'Unknown Company', trip.bus?._id)}
+              onPress={() => handlePress(trip.bus?.company?.name || 'Unknown Company', trip.bus?._id, trip.bus?.seatArrangement)}
             >
               <BusTripDetails
                 companyName={trip.bus?.company?.name || 'Unknown Company'}

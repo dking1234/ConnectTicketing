@@ -58,7 +58,7 @@ const verifyOtp = async () => {
       throw new Error('Phone number not found');
     }
 
-    const response = await axios.post('http://192.168.43.21:3000/verify/verify-otp', {
+    const response = await axios.post('http://172.20.10.13:3000/verify/verify-otp', {
       phoneNumber,
       otp,
     });

@@ -3,17 +3,23 @@ import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-nati
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 
-const SeatSelection = ({ busId }) => {
-  console.log('Bus ID:', busId);
+const SeatSelection = ({ busId, seatArrangement }) => {
   const [selectedSeat, setSelectedSeat] = useState(null);
   const [showOverlay, setShowOverlay] = useState(false);
-  const [busDetails, setBusDetails] = useState(null);
+  const [busDetails, setBusDetails] = useState({
+    seatConfiguration: "2-2", // Default value or null
+    numberOfSeats: 0,
+  });
   const [seats, setSeats] = useState([]);
+
+  // Log seatArrangement whenever it changes
+  useEffect(() => {
+  }, [seatArrangement]);
 
   useEffect(() => {
     const fetchBusDetails = async () => {
       try {
-        const response = await axios.get(`http://192.168.43.21:3000/api/buses/${busId}`);
+        const response = await axios.get(`http://172.20.10.13:3000/api/buses/${busId}`);
         setBusDetails(response.data);
 
         // Initialize seats based on the number of seats in busDetails
@@ -53,6 +59,38 @@ const SeatSelection = ({ busId }) => {
     navigation.navigate('ClassCondition');
   };
 
+  const renderSeats = () => {
+    const seatConfig = seatArrangement || "2-2"; // Use seatArrangement prop or default to "2-2"
+    const [left, right] = seatConfig.split('-');
+  
+    return Array.from({ length: busDetails.numberOfSeats / (parseInt(left) + parseInt(right)) }, (_, rowIndex) => (
+      <View style={styles.row} key={rowIndex}>
+        {Array.from({ length: parseInt(left) + parseInt(right) }, (_, colIndex) => (
+          <View key={colIndex} style={colIndex < parseInt(left) ? styles.leftSeat : styles.rightSeat}>
+            <TouchableOpacity
+              style={[
+                styles.seat,
+                seats[rowIndex * (parseInt(left) + parseInt(right)) + colIndex]?.available
+                  ? styles.available
+                  : styles.unavailable,
+                seats[rowIndex * (parseInt(left) + parseInt(right)) + colIndex]?.id === selectedSeat
+                  ? styles.selected
+                  : null,
+              ]}
+              onPress={() => {
+                const seatIndex = rowIndex * (parseInt(left) + parseInt(right)) + colIndex;
+                if (seats[seatIndex]?.available) handleSeatSelection(seats[seatIndex]?.id);
+              }}
+              disabled={!seats[rowIndex * (parseInt(left) + parseInt(right)) + colIndex]?.available}
+            >
+              <Text>{seats[rowIndex * (parseInt(left) + parseInt(right)) + colIndex]?.id}</Text>
+            </TouchableOpacity>
+          </View>
+        ))}
+      </View>
+    ));
+  };
+  
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Select Seat</Text>
@@ -73,29 +111,7 @@ const SeatSelection = ({ busId }) => {
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.seatsContainer}>
-          {busDetails?.numberOfSeats && Array.from({ length: busDetails.numberOfSeats / 4 }, (_, rowIndex) => (
-            <View style={styles.row} key={rowIndex}>
-              {Array.from({ length: 4 }, (_, colIndex) => (
-                <View key={colIndex} style={colIndex === 2 ? styles.rightSeat : null}>
-                  <TouchableOpacity
-                    style={[
-                      styles.seat,
-                      seats[rowIndex * 4 + colIndex]?.available ? styles.available : styles.unavailable,
-                      seats[rowIndex * 4 + colIndex]?.id === selectedSeat ? styles.selected : null,
-                    ]}
-                    onPress={() => {
-                      if (seats[rowIndex * 4 + colIndex]?.available) handleSeatSelection(seats[rowIndex * 4 + colIndex]?.id);
-                    }}
-                    disabled={!seats[rowIndex * 4 + colIndex]?.available}
-                  >
-                    <Text>{seats[rowIndex * 4 + colIndex]?.id}</Text>
-                  </TouchableOpacity>
-                </View>
-              ))}
-            </View>
-          ))}
-        </View>
+        <View style={styles.seatsContainer}>{renderSeats()}</View>
       </ScrollView>
 
       {showOverlay && (
@@ -103,18 +119,15 @@ const SeatSelection = ({ busId }) => {
           <Text style={styles.overlayButtonText}>Continue</Text>
         </TouchableOpacity>
       )}
-
     </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
     alignItems: 'center',
-
   },
   title: {
     fontWeight: '600',
@@ -172,7 +185,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   lastRow: {
-    marginBottom: 10,  // Original margin for consistency; seatsContainer paddingBottom provides the main space
+    marginBottom: 10,
   },
   overlayButton: {
     position: 'absolute',
@@ -185,14 +198,19 @@ const styles = StyleSheet.create({
     marginHorizontal: 40,
     justifyContent: 'center',
     alignItems: 'center',
-    opacity: 0.8
+    opacity: 0.8,
   },
   overlayButtonText: {
     color: 'white',
     fontWeight: 'bold',
     fontSize: 18,
   },
+  leftSeat: {
+    marginRight: 10,
+  },
+  rightSeat: {
+    marginLeft: 1,
+  },
 });
-
 
 export default SeatSelection;

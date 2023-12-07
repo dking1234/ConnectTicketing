@@ -19,7 +19,7 @@ const SeatSelection = ({ busId, seatArrangement }) => {
   useEffect(() => {
     const fetchBusDetails = async () => {
       try {
-        const response = await axios.get(`http://172.20.10.13:3000/api/buses/${busId}`);
+        const response = await axios.get(`http://ec2-3-87-76-135.compute-1.amazonaws.com/api/buses/${busId}`);
         setBusDetails(response.data);
 
         // Initialize seats based on the number of seats in busDetails

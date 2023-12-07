@@ -33,7 +33,7 @@ const saveUsername = async () => {
     await AsyncStorage.setItem('firstName', firstName);
 
     // Call the server endpoint to update the username
-    const response = await axios.post('http://172.20.10.13:3000/user/user-name', {
+    const response = await axios.post('http://ec2-3-87-76-135.compute-1.amazonaws.com/user/user-name', {
       phoneNumber,
       firstName,
       lastName

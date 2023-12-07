@@ -14,7 +14,7 @@ const SearchResult = ({ route }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.post('http://172.20.10.13:3000/api/bus-schedules/search', {
+        const response = await axios.post('http://ec2-3-87-76-135.compute-1.amazonaws.com/api/bus-schedules/search', {
           origin,
           destination,
           date: departureDate,

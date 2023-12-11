@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView  } from 'react-native'
+import { View, StyleSheet, ScrollView  } from 'react-native'
 import React from 'react'
 import PassengerContainer from '../Components/PassengerContainer'
 import BusCondition from '../Components/BusCondition'

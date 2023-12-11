@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { View, Image, ScrollView, StyleSheet, FlatList, Dimensions } from 'react-native';
+import { View, Image, StyleSheet, Dimensions } from 'react-native';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 
 const AdsSpace = () => {

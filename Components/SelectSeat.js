@@ -62,13 +62,20 @@ const SeatSelection = ({ busId, seatArrangement }) => {
     }
   }, [busId]);
 
-  const handleSeatSelection = (seatId) => {
-    if (selectedSeat === seatId) {
-      setSelectedSeat(null);
-      setShowOverlay(false);
-    } else {
-      setSelectedSeat(seatId);
-      setShowOverlay(true);
+  const handleSeatSelection = async (seatId) => {
+    try {
+      const response = await axios.post(`http://ec2-3-87-76-135.compute-1.amazonaws.com/api/${busId}/seats/select`, {
+        seatId,
+      });
+
+      if (response.data.success) {
+        setSelectedSeat(seatId);
+        setShowOverlay(true);
+      } else {
+        console.error('Failed to select seat:', response.data.message);
+      }
+    } catch (error) {
+      console.error('Error selecting seat:', error);
     }
   };
 

@@ -32,7 +32,7 @@ const PhoneNumberReg = () => {
     if (isChecked) {
       setIsLoading(true); // Set loading to true
       try {
-        const response = await axios.post('http://ec2-3-87-76-135.compute-1.amazonaws.com:3000/user/phone-number', { phoneNumber });
+        const response = await axios.post('http://ec2-3-87-76-135.compute-1.amazonaws.com/user/phone-number', { phoneNumber });
         console.log(response.data.message);
         
         // Save phoneNumber to AsyncStorage

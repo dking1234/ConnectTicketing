@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text, ImageBackground } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import TicketHeader from '../Components/TicketHeader';
 import WideButton from '../Components/WideButton';
 import TicketCard from '../Components/TicketCard';

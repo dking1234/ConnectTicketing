@@ -39,6 +39,29 @@ const SeatSelection = ({ busId, seatArrangement }) => {
     }
   }, [busId]);
 
+  useEffect(() => {
+    const fetchAvailableSeats = async () => {
+      try {
+        const response = await axios.get(`http://ec2-3-87-76-135.compute-1.amazonaws.com/api/buses/${busId}/available-seats`);
+        const availableSeatIds = response.data.availableSeats;
+
+        // Update the available status of seats based on the server response
+        const updatedSeats = seats.map((seat) => ({
+          ...seat,
+          available: availableSeatIds.includes(seat.id),
+        }));
+
+        setSeats(updatedSeats);
+      } catch (error) {
+        console.error('Error fetching available seats:', error);
+      }
+    };
+
+    if (busId) {
+      fetchAvailableSeats();
+    }
+  }, [busId]);
+
   const handleSeatSelection = (seatId) => {
     if (selectedSeat === seatId) {
       setSelectedSeat(null);
@@ -60,9 +83,9 @@ const SeatSelection = ({ busId, seatArrangement }) => {
   };
 
   const renderSeats = () => {
-    const seatConfig = seatArrangement || "2-2"; // Use seatArrangement prop or default to "2-2"
+    const seatConfig = seatArrangement || "2-2";
     const [left, right] = seatConfig.split('-');
-  
+
     return Array.from({ length: busDetails.numberOfSeats / (parseInt(left) + parseInt(right)) }, (_, rowIndex) => (
       <View style={styles.row} key={rowIndex}>
         {Array.from({ length: parseInt(left) + parseInt(right) }, (_, colIndex) => (

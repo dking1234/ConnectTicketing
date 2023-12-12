@@ -7,7 +7,9 @@ import TicketNo from '../Components/TicketNo'
 import WideButton from '../Components/WideButton'
 import { useNavigation } from '@react-navigation/native';
 
-const ClassCondition = () => {
+const ClassCondition = ({ route }) => {
+
+  const { busId, seatNumber, scheduleId } = route.params;
 
   const navigation = useNavigation();
 
@@ -20,13 +22,13 @@ const ClassCondition = () => {
     <ScrollView>
      <PassengerContainer />
      <View style={styles.container}>
-     <BusCondition />
+     <BusCondition busId ={busId}/>
      </View>
      <View style={styles.container}>
      <FareCondition />
      </View>
      <View style={styles.container}>
-     <TicketNo />
+     <TicketNo seatNumber={seatNumber} scheduleId={scheduleId}/>
      </View>
      <View style={{alignItems: 'center', marginTop: 30}}>
      <WideButton title="Proceed" onPress={handleContinue} />

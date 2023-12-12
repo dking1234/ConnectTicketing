@@ -25,6 +25,7 @@
     "react-native": "0.72.6",
     "react-native-autocomplete-input": "^5.4.0",
     "react-native-check-box": "^2.1.7",
+    "react-native-gifted-chat": "^2.4.0",
     "react-native-navigation": "^7.37.1",
     "react-native-qrcode-svg": "^6.2.0",
     "react-native-screens": "~3.22.0",

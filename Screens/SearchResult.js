@@ -31,10 +31,10 @@ const SearchResult = ({ route }) => {
     fetchData();
   }, [origin, destination, departureDate]);
 
-  const handlePress = (companyName, busId, seatArrangement) => {
-    console.log('Seat Arrangement:', seatArrangement);
-    navigation.navigate('SeatSelection', { companyName, busId, seatArrangement });
-  };
+  const handlePress = (companyName, busId, seatArrangement, scheduleId) => {
+    console.log('Seat Arrangement:', seatArrangement, scheduleId);
+    navigation.navigate('SeatSelection', { companyName, busId, seatArrangement, scheduleId });
+  };  
 
   return (
     <ScrollView style={styles.container}>
@@ -47,7 +47,12 @@ const SearchResult = ({ route }) => {
               activeScale={0.95}
               tension={50}
               friction={7}
-              onPress={() => handlePress(trip.bus?.company?.name || 'Unknown Company', trip.bus?._id, trip.bus?.seatArrangement)}
+              onPress={() => handlePress(
+                trip.bus?.company?.name || 'Unknown Company',
+                trip.bus?._id,
+                trip.bus?.seatArrangement,
+                trip._id  // Pass the scheduleId here
+              )}
             >
               <BusTripDetails
                 companyName={trip.bus?.company?.name || 'Unknown Company'}

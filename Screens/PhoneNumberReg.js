@@ -18,10 +18,7 @@ const PhoneNumberReg = () => {
   const handleCheck = (newValue) => {
     setIsChecked(newValue);
   };
-  const handleConfirm = () => {
-    // Navigate to ClassCondition screen
-    navigation.navigate('OTP');
-  };
+ 
   
   const handleRegistration = async () => { // Mark the function as async
     if (!phoneNumber) {

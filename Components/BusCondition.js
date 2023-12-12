@@ -1,39 +1,80 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import axios from 'axios';
 
-const BusCondition = () => {
+const BusCondition = ({ busId }) => {
+  const [busCondition, setBusCondition] = useState(null);
+  const [classType, setClassType]  = useState(null);
+
+  useEffect(() => {
+    // Fetch bus details based on busId
+    const fetchBusDetails = async () => {
+      try {
+        const response = await axios.get(`http://ec2-3-87-76-135.compute-1.amazonaws.com/api/buses/${busId}`);
+        const { classType, busCondition } = response.data;
+  
+        setClassType(classType);
+        setBusCondition(busCondition);
+
+      } catch (error) {
+        // Log an error message if the fetch fails
+        console.error('Error fetching bus details:', error);
+      }
+    };
+  
+    // Call the fetchBusDetails function when the busId changes
+    fetchBusDetails();
+  }, [busId]);
+
   return (
     <View>
       <View style={styles.passengerDetailsContainer}>
         <View style={styles.marginContainer}>
           <View style={styles.row}>
-            <Text style={styles.title}>Class Condition</Text>
+            <Text style={styles.title}>Bus Condition</Text>
           </View>
           <View style={styles.line} />
         </View>
         <View style={styles.borderBackground}>
-          <Text style={styles.textBold}>Luxury class</Text>
+          {busCondition && (
+            <>
+              <Text style={styles.textBold}>{classType} class</Text>
 
-          <View style={styles.iconContainer}>
-            <FontAwesome name="wifi" size={15} color="#152970" />
-            <Text style={[styles.textClass, { marginLeft: 8 }]}>Free Wi-fi</Text>
-          </View>
+              {busCondition.wifi && (
+                <View style={styles.iconContainer}>
+                  <FontAwesome name="wifi" size={15} color="#152970" />
+                  <Text style={[styles.textClass, { marginLeft: 8 }]}> Free Wi-fi</Text>
+                </View>
+              )}
 
-          <View style={styles.iconContainer}>
-            <FontAwesome name="plug" size={15} color="#152970" />
-            <Text style={[styles.textClass, { marginLeft: 8 }]}>Power Plugs</Text>
-          </View>
+              {busCondition.charger && (
+                <View style={styles.iconContainer}>
+                  <FontAwesome name="plug" size={15} color="#152970" />
+                  <Text style={[styles.textClass, { marginLeft: 8 }]}> Power Plugs</Text>
+                </View>
+              )}
 
-          <View style={styles.iconContainer}>
-            <FontAwesome name="coffee" size={15} color="#152970" />
-            <Text style={[styles.textClass, { marginLeft: 8 }]}>Free Drink</Text>
-          </View>
+              {busCondition.drinks && (
+                <View style={styles.iconContainer}>
+                  <FontAwesome name="coffee" size={15} color="#152970" />
+                  <Text style={[styles.textClass, { marginLeft: 8 }]}> Free Drink</Text>
+                </View>
+              )}
+
+                {busCondition.snacks && (
+                <View style={styles.iconContainer}>
+                <FontAwesome name="cutlery" size={15} color="#152970" />
+                  <Text style={[styles.textClass, { marginLeft: 8 }]}> Free Snacks</Text>
+                </View>
+              )}
+            </>
+          )}
         </View>
       </View>
     </View>
   );
-}
+};
 
 export default BusCondition;
 

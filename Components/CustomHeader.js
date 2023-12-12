@@ -4,7 +4,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { connect } from 'react-redux';
 
 const CustomHeader = ({ navigation, trip, passengers  }) => {
-  console.log('Trip data:', trip); // Log the entire trip object
   const { origin, destination, departureDate } = trip;
 
   return (

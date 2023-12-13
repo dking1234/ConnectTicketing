@@ -5,7 +5,9 @@ import WideButton from '../Components/WideButton';
 import TicketCard from '../Components/TicketCard';
 import { useNavigation } from '@react-navigation/native';
 
-const TicketScreen = () => {
+const TicketScreen = ({route}) => {
+
+  const { ticketId } = route.params;
 
   const navigation = useNavigation();
   
@@ -16,7 +18,7 @@ const TicketScreen = () => {
   return (
     <View style={styles.outerContainer}>
       <TicketHeader />
-      <TicketCard />
+      <TicketCard ticketId={ticketId}/>
       <View style={styles.wideButton}>
       <WideButton title="Download Ticket" onPress={handleDownload}/>
       </View>

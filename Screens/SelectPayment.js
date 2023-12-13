@@ -3,13 +3,29 @@ import React from 'react'
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
-const SelectPayment = () => {
+const SelectPayment = ({ route }) => {
+  const { companyName, scheduleId, seatNumber, userId } = route.params;
 
     const navigation = useNavigation();
 
     const handleHalotel = () => {
       // Navigate to ClassCondition screen
-      navigation.navigate('Payments');
+      navigation.navigate('HaloPayments', {scheduleId: scheduleId, companyName, seatNumber, userId});
+    };
+
+    const handleTigo = () => {
+      // Navigate to ClassCondition screen
+      navigation.navigate('TigoPayments', {scheduleId: scheduleId, companyName, seatNumber, userId});
+    };
+    
+    const handleVodacom = () => {
+      // Navigate to ClassCondition screen
+      navigation.navigate('VodaPayments', {scheduleId: scheduleId, companyName, seatNumber, userId});
+    };
+
+    const handleAirtel = () => {
+      // Navigate to ClassCondition screen
+      navigation.navigate('AirtelPayments', {scheduleId: scheduleId, companyName, seatNumber, userId});
     };
   return (
     <View>
@@ -28,7 +44,7 @@ const SelectPayment = () => {
           <View style={{marginTop: 10}}>
           <View style={styles.passengerDetailsContainer}>
       
-      <TouchableOpacity>
+      <TouchableOpacity onPress={handleVodacom}>
       <View style={styles.textContainer}>
         <Text style={styles.text}>Mpesa</Text>
         <MaterialIcons name="keyboard-arrow-right" size={18} color="black" />
@@ -37,7 +53,7 @@ const SelectPayment = () => {
       
       <View style={styles.line}/>
 
-      <TouchableOpacity>
+      <TouchableOpacity onPress={handleAirtel}>
       <View style={styles.textContainer}>
         <Text style={styles.text}>Airtel Money</Text>
       <MaterialIcons name="keyboard-arrow-right" size={18} color="black" />
@@ -46,7 +62,7 @@ const SelectPayment = () => {
 
       <View style={styles.line}/>
 
-      <TouchableOpacity>
+      <TouchableOpacity onPress={handleTigo}>
       <View style={styles.textContainer}>
         <Text style={styles.text}>Tigopesa</Text>
       <MaterialIcons name="keyboard-arrow-right" size={18} color="black" />

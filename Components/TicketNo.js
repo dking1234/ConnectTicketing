@@ -29,7 +29,7 @@ const TicketNo = ({ seatNumber, scheduleId }) => {
           </View>
           <View style={styles.row}>
             <Text style={styles.textGray}>
-              <Text style={styles.textBold}>Total</Text> (taxes included){' '}
+              <Text style={styles.textBold}>Bus Fare Price</Text>
             </Text>
             <Text style={styles.textBold}>{price} Tsh</Text>
           </View>

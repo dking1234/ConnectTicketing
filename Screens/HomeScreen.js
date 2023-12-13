@@ -18,7 +18,8 @@ const HomeScreen = ({ passengers }) => {
   const [selectedDate, setSelectedDate] = useState('');
   const [isCitySearchFilled, setIsCitySearchFilled] = useState(false);
   const [isDateTimePickerFilled, setIsDateTimePickerFilled] = useState(false);
-
+  const [userId, setUserId] = useState(null); 
+  
   useEffect(() => {
     // Fetch user's first name from AsyncStorage
     const fetchUserFirstName = async () => {
@@ -32,7 +33,40 @@ const HomeScreen = ({ passengers }) => {
       }
     };
 
+    // Fetch phoneNumber from AsyncStorage
+    const fetchPhoneNumber = async () => {
+      try {
+        const storedPhoneNumber = await AsyncStorage.getItem('phoneNumber');
+        return storedPhoneNumber;
+      } catch (error) {
+        console.error('Error fetching phone number:', error);
+      }
+    };
+
+    // Fetch userId from the backend using the phoneNumber
+    const fetchUserIdFromPhoneNumber = async () => {
+      try {
+        const phoneNumber = await fetchPhoneNumber();
+
+        if (!phoneNumber) {
+          console.error('Phone number not found in AsyncStorage');
+          return;
+        }
+
+        const response = await fetch(`http://192.168.43.21:80/user/userId/${phoneNumber}`);
+        const data = await response.json();
+
+        if (data.userId) {
+          setUserId(data.userId);
+          await AsyncStorage.setItem('userId', data.userId);
+        }
+      } catch (error) {
+        console.error('Error fetching userId:', error);
+      }
+    };
+
     fetchUserFirstName();
+    fetchUserIdFromPhoneNumber();
   }, []);
 
   const handleCitySelect = (city, inputType) => {

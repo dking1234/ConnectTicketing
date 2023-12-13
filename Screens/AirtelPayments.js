@@ -1,19 +1,72 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
-import React from 'react'
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import WideButton from '../Components/WideButton';
+import axios from 'axios';
 
-const Payments = () => {
+const AirtelPayments = ({ route }) => {
+  
+  const { companyName, scheduleId, seatNumber, userId } = route.params;
 
-    const navigation = useNavigation();
+  const [price, setPrice] = useState(null);
+  const [total, setTotal] = useState(null);
 
-    const handleConfirm = () => {
-      // Navigate to ClassCondition screen
-      navigation.navigate('ProcessedPayments');
+  useEffect(() => {
+    const fetchPrice = async () => {
+      try {
+        const response = await axios.get(`http://ec2-3-87-76-135.compute-1.amazonaws.com/api/bus-schedules/${scheduleId}`);
+        setPrice(response.data?.price || 'N/A');
+      } catch (error) {
+        console.error('Error fetching price:', error);
+      }
     };
+
+    fetchPrice();
+  }, [scheduleId]);
+
+  useEffect(() => {
+    if (price !== null) {
+      // Assuming service fee is 500 Tsh
+      const serviceFee = 500;
+      const calculatedTotal = price + serviceFee;
+      setTotal(calculatedTotal);
+    }
+  }, [price]);
+
+  const navigation = useNavigation();
+
+  
+  const handleConfirm = async () => {
+    try {
+      // Send a POST request to create the ticket
+      const response = await axios.post('http://ec2-3-87-76-135.compute-1.amazonaws.com/api/create-tickets', {
+        companyName,
+        scheduleId,
+        seatNumber,
+        userId,
+        total,
+      });
+
+      // Check if the ticket creation was successful
+      if (response.status === 201) {
+        const ticketId = response.data.ticketId; // Extract the ticketId from the response
+        console.log('Ticket created successfully. Ticket ID:', ticketId);
+
+        // Navigate to ProcessedPayments screen with the total amount and ticketId
+        navigation.navigate('ProcessedPayments', { ticketId });
+      } else {
+        console.error('Error creating ticket:', response.data.error);
+        // Handle the error or show an error message to the user
+      }
+    } catch (error) {
+      console.error('Error creating ticket:', error);
+      // Handle the error or show an error message to the user
+    }
+  };
+
   return (
       <View>
-        <Text style={styles.text2}>Payment via Halopesa</Text>
+        <Text style={styles.text2}>Payment via Airtel Money</Text>
        <View style={styles.passengerDetailsContainer}>
           <View style={styles.marginContainer}>
             <View style={styles.row}>
@@ -22,7 +75,7 @@ const Payments = () => {
         
             <View>
             <Text style={styles.textColor}>1. On your phone, dial *!50*88#</Text>
-            <Text style={styles.textColor}>2. Select option 4 (Pay by HaloPesa)</Text>
+            <Text style={styles.textColor}>2. Select option 4 (Pay by AirtelMoney)</Text>
             <Text style={styles.textColor}>3. Select option 4 (Transport)</Text>
             <Text style={styles.textColor}>4. Choose Option 1 (Connect Ticket)</Text>
             <Text style={styles.textColor}>5. Enter Reference Number (<Text style={styles.title}>903000098700</Text>)</Text>
@@ -37,7 +90,7 @@ const Payments = () => {
           <View style={styles.marginContainer}>
             <View style={styles.row}>
                 <Text style={styles.textGray}>Seat Price</Text>
-                <Text style={styles.textBold}>75,000 Tsh</Text>
+                <Text style={styles.textBold}>{price} Tsh</Text>
             </View>
             <View style={styles.row}>
                 <Text style={styles.textGray}>Service Fee</Text>
@@ -45,7 +98,7 @@ const Payments = () => {
             </View>
             <View style={styles.row}>
                 <Text style={styles.textGray}><Text style={styles.textBold}>Total</Text> (taxes included) </Text>
-                <Text style={styles.textBoldColor}>75,500 Tsh</Text>
+                <Text style={styles.textBoldColor}>{total} Tsh</Text>
             </View>
            </View>
         </View>
@@ -58,7 +111,7 @@ const Payments = () => {
   )
 }
 
-export default Payments
+export default AirtelPayments
 
 const styles = StyleSheet.create({
     passengerDetailsContainer:{

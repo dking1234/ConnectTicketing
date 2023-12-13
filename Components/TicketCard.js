@@ -1,8 +1,40 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ImageBackground, Text } from 'react-native';
 import MyQRCodeComponent from './MyQRCodeComponent';
+import axios from 'axios';
 
-const TicketCard = () => {
+const TicketCard = ({ ticketId }) => {
+  const [ticketDetails, setTicketDetails] = useState(null);
+  const [username, setUsername] = useState(null);
+
+  useEffect(() => {
+    const fetchTicketDetails = async () => {
+      try {
+        const response = await axios.get(`http://ec2-3-87-76-135.compute-1.amazonaws.com/api/tickets/${ticketId}`);
+        setTicketDetails(response.data);
+
+        // Fetch the username using userId from ticketDetails
+        const usernameResponse = await axios.get(`http://ec2-3-87-76-135.compute-1.amazonaws.com/user/user/${response.data.userId}`);
+        setUsername(usernameResponse.data.username);
+      } catch (error) {
+        console.error('Error fetching ticket details:', error);
+      }
+    };
+
+    fetchTicketDetails();
+  }, [ticketId]);
+
+  if (!ticketDetails || !username) {
+    return null;
+  }
+  // Format date and time
+  const formattedDepartureDate = new Date(ticketDetails.departureDate).toLocaleDateString();
+  const formattedDepartureTime = new Date(ticketDetails.departureTime);
+  const formattedTime = formattedDepartureTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const amPmIndicator = formattedDepartureTime.getHours() >= 12 ? 'PM' : 'AM';
+  const formattedDepartureTimeWithAmPm = `${formattedTime} ${amPmIndicator}`;
+
+  
   return (
     <View style={styles.imageContainer}>
     <ImageBackground 
@@ -10,16 +42,16 @@ const TicketCard = () => {
       style={styles.subtractBackground}
     >
       <View style={styles.textContainer}>
-        <Text style={styles.ticketText}>Wilhelmo Thomas</Text>
+        <Text style={styles.ticketText}>{username}</Text>
       </View>
       <View style={styles.textContainerRow}>
         <View style={{alignItems: 'flex-end'}}>
-        <Text style={styles.ticketText}>Dar</Text>
-        <Text style={styles.ticketText3}>05:30 AM</Text>
+        <Text style={styles.ticketText}>{ticketDetails.origin}</Text>
+        <Text style={styles.ticketText3}>{formattedDepartureTimeWithAmPm}</Text>
         </View>
         <View style={{alignItems: 'flex-start'}}>
-        <Text style={styles.ticketText}>Mwanza</Text>
-        <Text style={styles.ticketText3}>08:25 PM</Text>
+        <Text style={styles.ticketText}>{ticketDetails.destination}</Text>
+        <Text style={styles.ticketText3}>{formattedDepartureTimeWithAmPm}</Text>
         </View>
       </View>
       
@@ -27,43 +59,43 @@ const TicketCard = () => {
       <View style={styles.ticketDetails}>
       <Text style={styles.ticketText1}>Coach</Text>
       <Text style={styles.ticketText1}>:</Text>
-      <Text style={styles.ticketText2}>Abood</Text>
+      <Text style={styles.ticketText2}>{ticketDetails.companyName}</Text>
       </View>
 
       <View style={styles.ticketDetails}>
       <Text style={styles.ticketText1}>Date  of travel</Text>
       <Text style={styles.ticketText1}>:</Text>
-      <Text style={styles.ticketText2}>16-10-2023</Text>
+      <Text style={styles.ticketText2}>{formattedDepartureDate}</Text>
       </View>
 
       <View style={styles.ticketDetails}>
       <Text style={styles.ticketText1}>Departure Time</Text>
       <Text style={styles.ticketText1}>:</Text>
-      <Text style={styles.ticketText2}>05:30 AM</Text>
+      <Text style={styles.ticketText2}>{formattedDepartureTimeWithAmPm}</Text>
       </View>
       
       <View style={styles.ticketDetails}>
       <Text style={styles.ticketText1}>Seats No.</Text>
       <Text style={styles.ticketText1}>:</Text>
-      <Text style={styles.ticketText2}>14</Text>
+      <Text style={styles.ticketText2}>{ticketDetails.seatNumber}</Text>
       </View>
       
       <View style={styles.ticketDetails}>
       <Text style={styles.ticketText1}>Boarding Point</Text>
       <Text style={styles.ticketText1}>:</Text>
-      <Text style={styles.ticketText2}>Magufuli stand</Text>
+      <Text style={styles.ticketText2}>{ticketDetails.origin}</Text>
       </View>
 
       <View style={styles.ticketDetails}>
       <Text style={styles.ticketText1}>Dropping Point</Text>
       <Text style={styles.ticketText1}>:</Text>
-      <Text style={styles.ticketText2}>Mwanza stand</Text>
+      <Text style={styles.ticketText2}>{ticketDetails.destination}</Text>
       </View>
 
       <View style={styles.ticketDetails}>
       <Text style={styles.ticketText1}>Ticket Price</Text>
       <Text style={styles.ticketText1}>:</Text>
-      <Text style={styles.ticketText2}>75,000 Tsh</Text>
+      <Text style={styles.ticketText2}>{ticketDetails.price} Tsh</Text>
       </View>
       </View>
       <Text style={styles.ticketTextId}>ID 506-53</Text>

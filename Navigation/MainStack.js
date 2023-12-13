@@ -6,9 +6,12 @@ import CustomHeader from '../Components/CustomHeader';
 import SeatSelection from '../Screens/SeatSelection';
 import SearchResult from '../Screens/SearchResult';
 import SelectPayment from '../Screens/SelectPayment';
-import Payments from '../Screens/Payments';
+import HaloPayments from '../Screens/HaloPayments';
 import ProcessedPayments from '../Screens/ProcessedPayments';
 import TicketScreen from '../Screens/TicketScreen';
+import TigoPayments from '../Screens/TigoPayments';
+import VodaPayments from '../Screens/VodaPayments';
+import AirtelPayments from '../Screens/AirtelPayments';
 
 
 const Stack = createStackNavigator();
@@ -48,7 +51,19 @@ const MainStack = () => {
          <Stack.Screen name="SelectPayment" component={SelectPayment} options={{
           header: (props) => <CustomHeader {...props} />
         }} />
-         <Stack.Screen name="Payments" component={Payments} options={{
+         <Stack.Screen name="HaloPayments" component={HaloPayments} options={{
+          header: (props) => <CustomHeader {...props} />
+        }} />
+
+        <Stack.Screen name="TigoPayments" component={TigoPayments} options={{
+          header: (props) => <CustomHeader {...props} />
+        }} />
+
+         <Stack.Screen name="VodaPayments" component={VodaPayments} options={{
+          header: (props) => <CustomHeader {...props} />
+        }} />
+
+         <Stack.Screen name="AirtelPayments" component={AirtelPayments} options={{
           header: (props) => <CustomHeader {...props} />
         }} />
         

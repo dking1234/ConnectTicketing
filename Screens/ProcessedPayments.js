@@ -4,12 +4,15 @@ import BackButton from '../Components/BackButton';
 import WideButton from '../Components/WideButton';
 import { useNavigation } from '@react-navigation/native';
 
-const ProcessedPayments = () => {
+const ProcessedPayments = ({route}) => {
+  
+  const { ticketId } = route.params;
+
     const navigation = useNavigation();
 
     const handleNavigation = () => {
       // Navigate to ClassCondition screen
-      navigation.navigate('TicketScreen');
+      navigation.navigate('TicketScreen', {ticketId});
     };
 
   return (

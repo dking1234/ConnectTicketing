@@ -4,10 +4,11 @@
   import io from 'socket.io-client';
   import axios from 'axios';
 
-  const SeatSelection = ({ busId, seatArrangement, scheduleId }) => {
+  const SeatSelection = ({ companyName, busId, seatArrangement, scheduleId }) => {
     console.log('busId:', busId);
     console.log('seatArrangement:', seatArrangement);
     console.log('scheduleId:', scheduleId);
+    console.log('companyName:', companyName);
     
     const [selectedSeat, setSelectedSeat] = useState(null);
     const [showOverlay, setShowOverlay] = useState(false);
@@ -73,26 +74,16 @@
       fetchBusDetails();
     }, [busId, socket]);
 
-    const handleSeatSelection = async (seatId) => {
+    const handleSeatSelection = (seatId) => {
       try {
         // Directly set the seat as selected without fetching available seats
         setSelectedSeat(seatId);
         setShowOverlay(true);
-    
-        // Post the seat selection to the backend
-        const response = await axios.post(`http://ec2-3-87-76-135.compute-1.amazonaws.com/api/buses/${busId}/select`, {
-          seatId,
-        });
-    
-        if (!response.data.success) {
-          console.error('Failed to select seat:', response.data.message);
-          // Handle failure as needed, e.g., show an error message to the user
-        }
       } catch (error) {
         console.error('Error selecting seat:', error);
         // Handle error as needed, e.g., show an error message to the user
       }
-    };
+    };    
     
 
     const navigation = useNavigation();
@@ -101,11 +92,14 @@
       console.log("Bus ID:", busId);
       console.log("Seat selected:", selectedSeat);
       console.log("Schedule ID:", scheduleId);
+      console.log('companyName:', companyName);
+
       // Pass parameters to the 'ClassCondition' screen
       navigation.navigate('ClassCondition', {
         busId: busId,
         seatNumber: selectedSeat,
         scheduleId: scheduleId,
+        companyName: companyName,
       });
     };
 

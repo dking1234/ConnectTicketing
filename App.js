@@ -19,23 +19,23 @@ const [initialRoute, setInitialRoute] = useState('Registration');
 const [showSplash, setShowSplash] = useState(true);
 
 useEffect(() => {
-// Check if the user is signed in by retrieving data from AsyncStorage
-const checkSignInStatus = async () => {
-try {
-const phoneNumber = await AsyncStorage.getItem('phoneNumber');
-if (phoneNumber) {
-// User is signed in, set the initial route to MainStack
-setInitialRoute('MainStack');
-}
-} catch (error) {
-console.error('Error checking sign-in status:', error);
-} finally {
-// Hide the SplashScreen after the check is complete
-setShowSplash(false);
-}
-};
+  // Check if the user is signed in by retrieving data from AsyncStorage
+  const checkSignInStatus = async () => {
+    try {
+      const phoneNumber = await AsyncStorage.getItem('phoneNumber');
+      if (phoneNumber) {
+        // User is signed in, set the initial route to MainStack
+        setInitialRoute('MainStack');
+      }
+    } catch (error) {
+      console.error('Error checking sign-in status:', error);
+    } finally {
+      // Hide the SplashScreen after the check is complete
+      setShowSplash(false);
+    }
+  };
 
-checkSignInStatus();
+  checkSignInStatus();
 }, []);
 
 useEffect(() => {
@@ -43,7 +43,7 @@ useEffect(() => {
 if (showSplash) {
 const splashTimer = setTimeout(() => {
 setShowSplash(false);
-}, 100000); // Adjust the duration (in milliseconds) as needed
+}, 3000); // Adjust the duration (in milliseconds) as needed
 
 return () => clearTimeout(splashTimer);
 }

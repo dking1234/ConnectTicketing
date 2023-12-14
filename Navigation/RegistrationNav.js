@@ -3,7 +3,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import PhoneNumberReg from '../Screens/PhoneNumberReg';
 import OTP from '../Screens/OTPVerification';
 import UserName from '../Screens/UserName';
-import SplashScreen from '../Screens/SplashScreen';
 
 
 

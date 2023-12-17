@@ -14,13 +14,24 @@ const SearchResult = ({ route }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.post('http://ec2-3-87-76-135.compute-1.amazonaws.com/api/bus-schedules/search', {
-          origin,
-          destination,
-          date: departureDate,
+        const response = await fetch('http://ec2-3-87-76-135.compute-1.amazonaws.com/api/bus-schedules/search', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            origin,
+            destination,
+            date: departureDate,
+          }),
         });
 
-        setBusTrips(response.data);
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        setBusTrips(data);
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching search results:', error);

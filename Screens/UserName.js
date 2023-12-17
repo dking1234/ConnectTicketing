@@ -20,10 +20,11 @@ const [isLoading, setIsLoading] = useState(false);
 
 const saveUsername = async () => {
   setIsLoading(true);
+
   try {
     // Retrieve the phoneNumber from AsyncStorage
     const phoneNumber = await AsyncStorage.getItem('phoneNumber');
-    
+
     // Ensure phoneNumber is retrieved
     if (!phoneNumber) {
       throw new Error('Phone number not found. Please log in again.');
@@ -33,17 +34,24 @@ const saveUsername = async () => {
     await AsyncStorage.setItem('firstName', firstName);
 
     // Call the server endpoint to update the username
-    const response = await axios.post('http://ec2-3-87-76-135.compute-1.amazonaws.com/user/user-name', {
-      phoneNumber,
-      firstName,
-      lastName
+    const response = await fetch('http://ec2-3-87-76-135.compute-1.amazonaws.com/user/user-name', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        phoneNumber,
+        firstName,
+        lastName,
+      }),
     });
 
     // Check if the username update was successful
-    if (response.data.success) {
+    const data = await response.json();
+
+    if (data.success) {
       // Maybe navigate to another screen or update the state
       navigation.navigate('MainStack', { screen: 'Tab', params: { screen: 'HomeScreen' } });
-
     } else {
       setError('Failed to update username.');
     }

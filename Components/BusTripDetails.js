@@ -34,7 +34,7 @@ const BusTripDetails = ({ companyName, origin, destination, departureTime, arriv
 
   return (
     <View style={styles.container}>
-      <Text style={styles.textClassType}>{capitalizedClassType}</Text>
+      <Text style={styles.textClassType}>{capitalizedClassType} CLASS</Text>
       {/* <Image source={require('../Images/abood.png')} style={styles.HomeImage} /> */}
        <Text style={styles.text}>{capitalizedCompanyName}</Text>
       <View style={styles.departureTime}>

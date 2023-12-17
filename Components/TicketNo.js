@@ -8,14 +8,20 @@ const TicketNo = ({ seatNumber, scheduleId }) => {
   useEffect(() => {
     const fetchPrice = async () => {
       try {
-        const response = await axios.get(`http://ec2-3-87-76-135.compute-1.amazonaws.com/api/bus-schedules/${scheduleId}`);
+        const response = await fetch(`http://ec2-3-87-76-135.compute-1.amazonaws.com/api/bus-schedules/${scheduleId}`);
+        
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+  
+        const data = await response.json();
         // Replace the following line based on the actual structure of your API response
-        setPrice(response.data?.price || 'N/A');
+        setPrice(data?.price || 'N/A');
       } catch (error) {
         console.error('Error fetching price:', error);
       }
     };
-
+  
     fetchPrice();
   }, [scheduleId]);
 

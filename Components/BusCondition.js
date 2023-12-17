@@ -11,19 +11,23 @@ const BusCondition = ({ busId }) => {
     // Fetch bus details based on busId
     const fetchBusDetails = async () => {
       try {
-        const response = await axios.get(`http://ec2-3-87-76-135.compute-1.amazonaws.com/api/buses/${busId}`);
-        const { classType, busCondition } = response.data;
+        const response = await fetch(`http://ec2-3-87-76-135.compute-1.amazonaws.com/api/buses/${busId}`);
+        
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+  
+        const data = await response.json();
+        const { classType, busCondition } = data;
   
         setClassType(classType);
         setBusCondition(busCondition);
-
       } catch (error) {
         // Log an error message if the fetch fails
         console.error('Error fetching bus details:', error);
       }
     };
   
-    // Call the fetchBusDetails function when the busId changes
     fetchBusDetails();
   }, [busId]);
 

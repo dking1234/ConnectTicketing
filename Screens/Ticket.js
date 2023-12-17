@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
 
 const Ticket = () => {
   const [tickets, setTickets] = useState([]);
@@ -26,8 +25,14 @@ const Ticket = () => {
 
   const fetchTickets = async (userId) => {
     try {
-      const response = await axios.get(`http://192.168.43.21:80/api/tickets/user/${userId}`);
-      setTickets(response.data);
+      const response = await fetch(`http://3.87.76.135/api/tickets/user/${userId}`);
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      const data = await response.json();
+      setTickets(data);
     } catch (error) {
       console.error('Error fetching tickets:', error);
     }

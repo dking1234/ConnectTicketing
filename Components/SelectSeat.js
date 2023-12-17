@@ -2,7 +2,7 @@
   import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
   import { useNavigation } from '@react-navigation/native';
   import io from 'socket.io-client';
-  import axios from 'axios';
+
 
   const SeatSelection = ({ companyName, busId, seatArrangement, scheduleId }) => {
     console.log('busId:', busId);
@@ -57,22 +57,28 @@
 
       const fetchBusDetails = async () => {
         try {
-          const response = await axios.get(`http://ec2-3-87-76-135.compute-1.amazonaws.com/api/buses/${busId}`);
-          setBusDetails(response.data);
-
-          const initializedSeats = Array.from({ length: response.data.numberOfSeats }, (_, index) => ({
+          const response = await fetch(`http://ec2-3-87-76-135.compute-1.amazonaws.com/api/buses/${busId}`);
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+  
+          const data = await response.json();
+          setBusDetails(data);
+  
+          const initializedSeats = Array.from({ length: data.numberOfSeats }, (_, index) => ({
             id: (index + 1).toString(),
             available: Math.random() < 0.8,
           }));
-
+  
           setSeats(initializedSeats);
         } catch (error) {
           console.error('Error fetching bus details:', error);
         }
       };
-
+  
       fetchBusDetails();
     }, [busId, socket]);
+  
 
     const handleSeatSelection = (seatId) => {
       try {

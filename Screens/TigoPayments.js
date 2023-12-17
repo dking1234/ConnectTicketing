@@ -2,65 +2,79 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import WideButton from '../Components/WideButton';
-import axios from 'axios';
+
 
 const TigoPayments = ({route}) => {
     const { companyName, scheduleId, seatNumber, userId } = route.params;
 
     const [price, setPrice] = useState(null);
     const [total, setTotal] = useState(null);
-  
-    useEffect(() => {
-      const fetchPrice = async () => {
-        try {
-          const response = await axios.get(`http://ec2-3-87-76-135.compute-1.amazonaws.com/api/bus-schedules/${scheduleId}`);
-          setPrice(response.data?.price || 'N/A');
-        } catch (error) {
-          console.error('Error fetching price:', error);
-        }
-      };
-  
-      fetchPrice();
-    }, [scheduleId]);
-  
-    useEffect(() => {
-      if (price !== null) {
-        // Assuming service fee is 500 Tsh
-        const serviceFee = 500;
-        const calculatedTotal = price + serviceFee;
-        setTotal(calculatedTotal);
-      }
-    }, [price]);
-  
     const navigation = useNavigation();
-  
-    const handleConfirm = async () => {
-        try {
-          // Send a POST request to create the ticket
-          const response = await axios.post('http://ec2-3-87-76-135.compute-1.amazonaws.com/api/create-tickets', {
-            companyName,
-            scheduleId,
-            seatNumber,
-            userId,
-            total,
-          });
-    
-          // Check if the ticket creation was successful
-          if (response.status === 201) {
-            const ticketId = response.data.ticketId; // Extract the ticketId from the response
-            console.log('Ticket created successfully. Ticket ID:', ticketId);
-    
-            // Navigate to ProcessedPayments screen with the total amount and ticketId
-            navigation.navigate('ProcessedPayments', { ticketId });
-          } else {
-            console.error('Error creating ticket:', response.data.error);
-            // Handle the error or show an error message to the user
-          }
-        } catch (error) {
-          console.error('Error creating ticket:', error);
-          // Handle the error or show an error message to the user
+
+  useEffect(() => {
+    const fetchPrice = async () => {
+      try {
+        const response = await fetch(`http://ec2-3-87-76-135.compute-1.amazonaws.com/api/bus-schedules/${scheduleId}`);
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
         }
-      };
+
+        const data = await response.json();
+        setPrice(data?.price || 'N/A');
+      } catch (error) {
+        console.error('Error fetching price:', error);
+      }
+    };
+
+    fetchPrice();
+  }, [scheduleId]);
+
+  useEffect(() => {
+    if (price !== null) {
+      // Assuming service fee is 500 Tsh
+      const serviceFee = 500;
+      const calculatedTotal = price + serviceFee;
+      setTotal(calculatedTotal);
+    }
+  }, [price]);
+
+  const handleConfirm = async () => {
+    try {
+      // Send a POST request to create the ticket
+      const response = await fetch('http://ec2-3-87-76-135.compute-1.amazonaws.com/api/create-tickets', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          companyName,
+          scheduleId,
+          seatNumber,
+          userId,
+          total,
+        }),
+      });
+
+      // Check if the ticket creation was successful
+      if (response.ok) {
+        const responseData = await response.json();
+        const ticketId = responseData.ticketId; // Extract the ticketId from the response
+        console.log('Ticket created successfully. Ticket ID:', ticketId);
+
+        // Navigate to ProcessedPayments screen with the total amount and ticketId
+        navigation.navigate('ProcessedPayments', { ticketId });
+      } else {
+        const errorData = await response.json();
+        console.error('Error creating ticket:', errorData.error);
+        // Handle the error or show an error message to the user
+      }
+    } catch (error) {
+      console.error('Error creating ticket:', error);
+      // Handle the error or show an error message to the user
+    }
+  };
+
   return (
       <View>
         <Text style={styles.text2}>Payment via TigoPesa</Text>

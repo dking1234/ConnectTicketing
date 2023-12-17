@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, ImageBackground, Text } from 'react-native';
 import MyQRCodeComponent from './MyQRCodeComponent';
-import axios from 'axios';
 
 const TicketCard = ({ ticketId }) => {
   const [ticketDetails, setTicketDetails] = useState(null);
@@ -10,12 +9,19 @@ const TicketCard = ({ ticketId }) => {
   useEffect(() => {
     const fetchTicketDetails = async () => {
       try {
-        const response = await axios.get(`http://ec2-3-87-76-135.compute-1.amazonaws.com/api/tickets/${ticketId}`);
-        setTicketDetails(response.data);
+        const response = await fetch(`http://3.87.76.135/api/tickets/${ticketId}`);
+
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        setTicketDetails(data);
 
         // Fetch the username using userId from ticketDetails
-        const usernameResponse = await axios.get(`http://ec2-3-87-76-135.compute-1.amazonaws.com/user/user/${response.data.userId}`);
-        setUsername(usernameResponse.data.username);
+        const usernameResponse = await fetch(`http://ec2-3-87-76-135.compute-1.amazonaws.com/user/user/${data.userId}`);
+        const usernameData = await usernameResponse.json();
+        setUsername(usernameData.username);
       } catch (error) {
         console.error('Error fetching ticket details:', error);
       }
@@ -27,6 +33,7 @@ const TicketCard = ({ ticketId }) => {
   if (!ticketDetails || !username) {
     return null;
   }
+
   // Format date and time
   const formattedDepartureDate = new Date(ticketDetails.departureDate).toLocaleDateString();
   const formattedDepartureTime = new Date(ticketDetails.departureTime);

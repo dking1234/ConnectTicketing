@@ -26,14 +26,17 @@ const PassengerContainer = () => {
 
     fetchPhoneNumber();
   }, []);
-
   const fetchUsername = async (phoneNumber) => {
     try {
       // Replace 'http://localhost:3000' with your AWS EC2 endpoint
-      const response = await axios.get(`http://ec2-3-87-76-135.compute-1.amazonaws.com/user/username/${phoneNumber}`);
+      const response = await fetch(`http://ec2-3-87-76-135.compute-1.amazonaws.com/user/username/${phoneNumber}`);
   
-      // Assuming the response contains a 'username' property
-      const fetchedUsername = response.data.username;
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      const fetchedUsername = data.username;
       setUsername(fetchedUsername);
       
     } catch (error) {

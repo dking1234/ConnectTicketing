@@ -49,27 +49,36 @@ const handleConfirm = () => {
 const verifyOtp = async () => {
   const otp = otpValues.join('');
   setIsLoading(true);
+
   try {
     // Retrieve the phoneNumber from AsyncStorage
     const phoneNumber = await AsyncStorage.getItem('phoneNumber');
-    
+
     // Ensure phoneNumber is retrieved
     if (!phoneNumber) {
       throw new Error('Phone number not found');
     }
 
-    const response = await axios.post('http://ec2-3-87-76-135.compute-1.amazonaws.com/verify/verify-otp', {
-      phoneNumber,
-      otp,
+    const response = await fetch('http://ec2-3-87-76-135.compute-1.amazonaws.com/verify/verify-otp', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        phoneNumber,
+        otp,
+      }),
     });
 
     // Check if the OTP verification was successful
-    if (response.data.success) {
+    const data = await response.json();
+
+    if (data.success) {
       // If so, navigate to the 'UserName' screen
       navigation.navigate('UserName', { phoneNumber });
     } else {
       // If not, set the error state with the message from the response or a default message
-      setError(response.data.message || 'Invalid OTP.');
+      setError(data.message || 'Invalid OTP.');
     }
   } catch (error) {
     // Error handling remains the same...

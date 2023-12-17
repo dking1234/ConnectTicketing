@@ -10,7 +10,6 @@ import axios from 'axios';
 
 const PhoneNumberReg = () => {
   const navigation = useNavigation();
-
   const [phoneNumber, setPhoneNumber] = useState('');
   const [isChecked, setIsChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -18,31 +17,42 @@ const PhoneNumberReg = () => {
   const handleCheck = (newValue) => {
     setIsChecked(newValue);
   };
- 
-  
-  const handleRegistration = async () => { // Mark the function as async
+
+  const handleRegistration = () => {
     if (!phoneNumber) {
       Alert.alert('Angalizo', 'Tafadhali weka namba ya simu.');
       return;
     }
-  
+
     if (isChecked) {
-      setIsLoading(true); // Set loading to true
-      try {
-        const response = await axios.post('http://ec2-3-87-76-135.compute-1.amazonaws.com/user/phone-number', { phoneNumber });
-        console.log(response.data.message);
-        
-        // Save phoneNumber to AsyncStorage
-        await AsyncStorage.setItem('phoneNumber', phoneNumber);
-        
-        // Navigate to the OTP screen with the phoneNumber
-        navigation.navigate('OTP', { phoneNumber: phoneNumber });
-      } catch (error) {
-        console.error('Error during registration:', error);
-        Alert.alert('Registration Error', 'There was an issue registering your phone number.');
-      } finally {
-        setIsLoading(false); // Set loading to false on error or success
-      }
+      setIsLoading(true);
+      fetch('http://ec2-3-87-76-135.compute-1.amazonaws.com/user/phone-number', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ phoneNumber }),
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log(data.message);
+          return AsyncStorage.setItem('phoneNumber', phoneNumber);
+        })
+        .then(() => {
+          navigation.navigate('OTP', { phoneNumber: phoneNumber });
+        })
+        .catch((error) => {
+          console.error('Error during registration:', error);
+          Alert.alert('Registration Error', 'There was an issue registering your phone number.');
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
     } else {
       Alert.alert('Angalizo', 'Kubali Vigezo na Masharti Kuendelea.');
     }

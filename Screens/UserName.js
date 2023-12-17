@@ -34,7 +34,7 @@ const saveUsername = async () => {
     await AsyncStorage.setItem('firstName', firstName);
 
     // Call the server endpoint to update the username
-    const response = await fetch('http://ec2-3-87-76-135.compute-1.amazonaws.com/user/user-name', {
+    const response = await fetch('http://ec2-3-87-76-135.compute-1.amazonaws.com:80/user/user-name', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

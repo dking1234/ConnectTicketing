@@ -9,7 +9,7 @@ const TicketCard = ({ ticketId }) => {
   useEffect(() => {
     const fetchTicketDetails = async () => {
       try {
-        const response = await fetch(`http://3.87.76.135/api/tickets/${ticketId}`);
+        const response = await fetch(`http://ec2-3-87-76-135.compute-1.amazonaws.com:80/api/tickets/${ticketId}`);
 
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -19,7 +19,7 @@ const TicketCard = ({ ticketId }) => {
         setTicketDetails(data);
 
         // Fetch the username using userId from ticketDetails
-        const usernameResponse = await fetch(`http://ec2-3-87-76-135.compute-1.amazonaws.com/user/user/${data.userId}`);
+        const usernameResponse = await fetch(`http://ec2-3-87-76-135.compute-1.amazonaws.com:80/user/user/${data.userId}`);
         const usernameData = await usernameResponse.json();
         setUsername(usernameData.username);
       } catch (error) {

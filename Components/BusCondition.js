@@ -11,7 +11,7 @@ const BusCondition = ({ busId }) => {
     // Fetch bus details based on busId
     const fetchBusDetails = async () => {
       try {
-        const response = await fetch(`http://ec2-3-87-76-135.compute-1.amazonaws.com/api/buses/${busId}`);
+        const response = await fetch(`http://ec2-3-87-76-135.compute-1.amazonaws.com:80/api/buses/${busId}`);
         
         if (!response.ok) {
           throw new Error('Network response was not ok');

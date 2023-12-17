@@ -3,7 +3,6 @@ import { ScrollView, StyleSheet, View, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import TouchableScale from 'react-native-touchable-scale';
 import BusTripDetails from '../Components/BusTripDetails';
-import axios from 'axios';
 
 const SearchResult = ({ route }) => {
   const { origin, destination, departureDate } = route.params;
@@ -14,7 +13,7 @@ const SearchResult = ({ route }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://ec2-3-87-76-135.compute-1.amazonaws.com/api/bus-schedules/search', {
+        const response = await fetch('http://ec2-3-87-76-135.compute-1.amazonaws.com:80/api/bus-schedules/search', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

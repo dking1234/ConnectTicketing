@@ -59,7 +59,7 @@ const verifyOtp = async () => {
       throw new Error('Phone number not found');
     }
 
-    const response = await fetch('http://ec2-3-87-76-135.compute-1.amazonaws.com/verify/verify-otp', {
+    const response = await fetch('http://ec2-3-87-76-135.compute-1.amazonaws.com:80/verify/verify-otp', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

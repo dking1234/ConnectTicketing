@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
+
 
 const PassengerContainer = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -26,10 +26,11 @@ const PassengerContainer = () => {
 
     fetchPhoneNumber();
   }, []);
+
   const fetchUsername = async (phoneNumber) => {
     try {
       // Replace 'http://localhost:3000' with your AWS EC2 endpoint
-      const response = await fetch(`http://ec2-3-87-76-135.compute-1.amazonaws.com/user/username/${phoneNumber}`);
+      const response = await fetch(`http://ec2-3-87-76-135.compute-1.amazonaws.com:80/user/username/${phoneNumber}`);
   
       if (!response.ok) {
         throw new Error('Network response was not ok');

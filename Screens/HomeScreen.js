@@ -53,7 +53,7 @@ const HomeScreen = ({ passengers }) => {
           return;
         }
 
-        const response = await fetch(`http://ec2-3-87-76-135.compute-1.amazonaws.com/user/userId/${phoneNumber}`);
+        const response = await fetch(`http://ec2-3-87-76-135.compute-1.amazonaws.com:80/user/userId/${phoneNumber}`);
         const data = await response.json();
 
         if (data.userId) {

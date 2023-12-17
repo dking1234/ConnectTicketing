@@ -26,7 +26,7 @@ const PhoneNumberReg = () => {
 
     if (isChecked) {
       setIsLoading(true);
-      fetch('http://ec2-3-87-76-135.compute-1.amazonaws.com/user/phone-number', {
+      fetch('http://ec2-3-87-76-135.compute-1.amazonaws.com:80/user/phone-number', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

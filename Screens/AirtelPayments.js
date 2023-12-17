@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import WideButton from '../Components/WideButton';
-import axios from 'axios';
 
-const AirtelPayments = ({ route }) => {
-  
-  const { companyName, scheduleId, seatNumber, userId } = route.params;
 
-  const [price, setPrice] = useState(null);
-  const [total, setTotal] = useState(null);
+const AirtelPayments = ({route}) => {
+    const { companyName, scheduleId, seatNumber, userId } = route.params;
+
+    const [price, setPrice] = useState(null);
+    const [total, setTotal] = useState(null);
+    const navigation = useNavigation();
 
   useEffect(() => {
     const fetchPrice = async () => {
@@ -34,7 +34,7 @@ const AirtelPayments = ({ route }) => {
     if (price !== null) {
       // Assuming service fee is 500 Tsh
       const serviceFee = 500;
-      const calculatedTotal = parseFloat(price) + serviceFee;
+      const calculatedTotal = price + serviceFee;
       setTotal(calculatedTotal);
     }
   }, [price]);
@@ -56,21 +56,17 @@ const AirtelPayments = ({ route }) => {
         }),
       });
 
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
-      const responseData = await response.json();
-
       // Check if the ticket creation was successful
-      if (responseData.status === 201) {
-        const ticketId = responseData.data.ticketId; // Extract the ticketId from the response
+      if (response.ok) {
+        const responseData = await response.json();
+        const ticketId = responseData.ticketId; // Extract the ticketId from the response
         console.log('Ticket created successfully. Ticket ID:', ticketId);
 
         // Navigate to ProcessedPayments screen with the total amount and ticketId
         navigation.navigate('ProcessedPayments', { ticketId });
       } else {
-        console.error('Error creating ticket:', responseData.data.error);
+        const errorData = await response.json();
+        console.error('Error creating ticket:', errorData.error);
         // Handle the error or show an error message to the user
       }
     } catch (error) {
@@ -81,7 +77,7 @@ const AirtelPayments = ({ route }) => {
 
   return (
       <View>
-        <Text style={styles.text2}>Payment via Airtel Money</Text>
+        <Text style={styles.text2}>Payment via AirteMoney</Text>
        <View style={styles.passengerDetailsContainer}>
           <View style={styles.marginContainer}>
             <View style={styles.row}>
@@ -90,7 +86,7 @@ const AirtelPayments = ({ route }) => {
         
             <View>
             <Text style={styles.textColor}>1. On your phone, dial *!50*88#</Text>
-            <Text style={styles.textColor}>2. Select option 4 (Pay by AirtelMoney)</Text>
+            <Text style={styles.textColor}>2. Select option 4 (Pay by AirteMoney)</Text>
             <Text style={styles.textColor}>3. Select option 4 (Transport)</Text>
             <Text style={styles.textColor}>4. Choose Option 1 (Connect Ticket)</Text>
             <Text style={styles.textColor}>5. Enter Reference Number (<Text style={styles.title}>903000098700</Text>)</Text>

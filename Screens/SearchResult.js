@@ -13,7 +13,7 @@ const SearchResult = ({ route }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://ec2-3-87-76-135.compute-1.amazonaws.com:80/api/bus-schedules/search', {
+        const response = await fetch('http://ec2-3-87-76-135.compute-1.amazonaws.com:3000/api/bus-schedules/search', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

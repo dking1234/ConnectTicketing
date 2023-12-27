@@ -21,7 +21,7 @@
     const [socket, setSocket] = useState(null);
 
     useEffect(() => {
-      const newSocket = io('http://ec2-3-87-76-135.compute-1.amazonaws.com:80');
+      const newSocket = io('http://ec2-3-87-76-135.compute-1.amazonaws.com:3000');
       setSocket(newSocket);
 
       return () => {
@@ -57,7 +57,7 @@
 
       const fetchBusDetails = async () => {
         try {
-          const response = await fetch(`http://ec2-3-87-76-135.compute-1.amazonaws.com:80/api/buses/${busId}`);
+          const response = await fetch(`http://ec2-3-87-76-135.compute-1.amazonaws.com:3000/api/buses/${busId}`);
           if (!response.ok) {
             throw new Error('Network response was not ok');
           }

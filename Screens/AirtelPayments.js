@@ -14,7 +14,7 @@ const AirtelPayments = ({route}) => {
   useEffect(() => {
     const fetchPrice = async () => {
       try {
-        const response = await fetch(`http://ec2-3-87-76-135.compute-1.amazonaws.com:80/api/bus-schedules/${scheduleId}`);
+        const response = await fetch(`http://ec2-3-87-76-135.compute-1.amazonaws.com:3000/api/bus-schedules/${scheduleId}`);
 
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -42,7 +42,7 @@ const AirtelPayments = ({route}) => {
   const handleConfirm = async () => {
     try {
       // Send a POST request to create the ticket
-      const response = await fetch('http://ec2-3-87-76-135.compute-1.amazonaws.com:80/api/create-tickets', {
+      const response = await fetch('http://ec2-3-87-76-135.compute-1.amazonaws.com:3000/api/create-tickets', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

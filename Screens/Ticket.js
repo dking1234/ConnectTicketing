@@ -25,7 +25,7 @@ const Ticket = () => {
 
   const fetchTickets = async (userId) => {
     try {
-      const response = await fetch(`http://ec2-3-87-76-135.compute-1.amazonaws.com:80/api/tickets/user/${userId}`);
+      const response = await fetch(`https://connect-ticketing.work.gd/api/tickets/user/${userId}`);
   
       if (!response.ok) {
         throw new Error('Network response was not ok');

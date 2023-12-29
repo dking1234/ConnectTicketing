@@ -3,6 +3,7 @@ import { ScrollView, StyleSheet, View, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import TouchableScale from 'react-native-touchable-scale';
 import BusTripDetails from '../Components/BusTripDetails';
+import axios from 'axios';
 
 const SearchResult = ({ route }) => {
   const { origin, destination, departureDate } = route.params;
@@ -13,31 +14,28 @@ const SearchResult = ({ route }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://ec2-3-87-76-135.compute-1.amazonaws.com:3000/api/bus-schedules/search', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
+        const response = await axios.post(
+          'https://connect-ticketing.work.gd/api/bus-schedules/search',
+          {
             origin,
             destination,
             date: departureDate,
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-
-        const data = await response.json();
-        setBusTrips(data);
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+  
+        setBusTrips(response.data);
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching search results:', error);
         setIsLoading(false);
       }
     };
-
+  
     fetchData();
   }, [origin, destination, departureDate]);
 

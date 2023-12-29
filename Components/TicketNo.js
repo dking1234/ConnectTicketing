@@ -8,7 +8,7 @@ const TicketNo = ({ seatNumber, scheduleId }) => {
   useEffect(() => {
     const fetchPrice = async () => {
       try {
-        const response = await fetch(`http://ec2-3-87-76-135.compute-1.amazonaws.com:3000/api/bus-schedules/${scheduleId}`);
+        const response = await fetch(`https://connect-ticketing.work.gd/api/bus-schedules/${scheduleId}`);
         
         if (!response.ok) {
           throw new Error('Network response was not ok');

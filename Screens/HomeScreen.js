@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, Image, StyleSheet, SafeAreaView, ActivityIndicator, Text } from 'react-native';
+import {
+  View,
+  Image,
+  StyleSheet,
+  SafeAreaView,
+  ActivityIndicator,
+  Text,
+  FlatList, // Switched from ScrollView to FlatList
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import BookingData from '../Components/BookingData';
 import CitySearch from '../Components/CitySearch';
@@ -18,10 +26,9 @@ const HomeScreen = ({ passengers }) => {
   const [selectedDate, setSelectedDate] = useState('');
   const [isCitySearchFilled, setIsCitySearchFilled] = useState(false);
   const [isDateTimePickerFilled, setIsDateTimePickerFilled] = useState(false);
-  const [userId, setUserId] = useState(null); 
-  
+  const [userId, setUserId] = useState(null);
+
   useEffect(() => {
-    // Fetch user's first name from AsyncStorage
     const fetchUserFirstName = async () => {
       try {
         const storedFirstName = await AsyncStorage.getItem('firstName');
@@ -33,7 +40,6 @@ const HomeScreen = ({ passengers }) => {
       }
     };
 
-    // Fetch phoneNumber from AsyncStorage
     const fetchPhoneNumber = async () => {
       try {
         const storedPhoneNumber = await AsyncStorage.getItem('phoneNumber');
@@ -43,7 +49,6 @@ const HomeScreen = ({ passengers }) => {
       }
     };
 
-    // Fetch userId from the backend using the phoneNumber
     const fetchUserIdFromPhoneNumber = async () => {
       try {
         const phoneNumber = await fetchPhoneNumber();
@@ -77,7 +82,6 @@ const HomeScreen = ({ passengers }) => {
     }
   };
 
-  // Function to handle date selection
   const handleDateSelect = (date, type) => {
     if (type === 'departureDate') {
       setSelectedDate(date);
@@ -85,7 +89,6 @@ const HomeScreen = ({ passengers }) => {
   };
 
   const handleConfirm = () => {
-    // Navigate to ClassCondition screen
     navigation.navigate('SearchResult', {
       origin: selectedOrigin,
       destination: selectedDestination,
@@ -95,32 +98,41 @@ const HomeScreen = ({ passengers }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.imageContainer}>
-        <Image source={require('../Images/Top.png')} style={styles.HomeImage}/>
-        <Text style={styles.textOnTop}>Welcome! {firstName}</Text>
-      </View>
-      <CitySearch onCitySelect={handleCitySelect} setIsCitySearchFilled={setIsCitySearchFilled} />
-      <View style={styles.datePicker}>
-        <MyDateTimePicker
-          onDateSelect={handleDateSelect}
-          origin={selectedOrigin}
-          destination={selectedDestination}
-          setIsDateTimePickerFilled={setIsDateTimePickerFilled}
-        />
-      </View>
-      <BookingData />
-      <View style={styles.buttonContainer}>
-        {isLoading ? (
-          <ActivityIndicator size="large" color="white" /> // Show loading spinner when isLoading is true
-        ) : (
-          <WideButton
-          title="Search Bus"
-          onPress={handleConfirm}
-          disabled={!isCitySearchFilled || !isDateTimePickerFilled}
-        />
+      <FlatList
+        contentContainerStyle={styles.flatListContainer}
+        data={[1]} // Dummy data for FlatList
+        keyExtractor={(item) => item.toString()}
+        renderItem={() => (
+          <>
+            <View style={styles.imageContainer}>
+              <Image source={require('../Images/Top.png')} style={styles.homeImage} />
+              <Text style={styles.textOnTop}>Welcome! {firstName}</Text>
+            </View>
+            <CitySearch onCitySelect={handleCitySelect} setIsCitySearchFilled={setIsCitySearchFilled} />
+            <View style={styles.datePicker}>
+              <MyDateTimePicker
+                onDateSelect={handleDateSelect}
+                origin={selectedOrigin}
+                destination={selectedDestination}
+                setIsDateTimePickerFilled={setIsDateTimePickerFilled}
+              />
+            </View>
+            <BookingData />
+            <View style={styles.buttonContainer}>
+              {isLoading ? (
+                <ActivityIndicator size="large" color="white" />
+              ) : (
+                <WideButton
+                  title="Search Buses"
+                  onPress={handleConfirm}
+                  disabled={!isCitySearchFilled || !isDateTimePickerFilled}
+                />
+              )}
+            </View>
+            <AdsSpace />
+          </>
         )}
-      </View>
-      <AdsSpace />
+      />
     </SafeAreaView>
   );
 };
@@ -128,6 +140,9 @@ const HomeScreen = ({ passengers }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  flatListContainer: {
+    flexGrow: 1,
   },
   imageContainer: {
     alignItems: 'center',
@@ -137,21 +152,12 @@ const styles = StyleSheet.create({
     marginTop: 10,
     alignItems: 'center',
   },
-  adsSpace: {
-    flexDirection: 'row',
-    marginHorizontal: 20,
-  },
   datePicker: {
     marginHorizontal: 15,
     marginTop: -30,
     marginBottom: 6,
   },
-  Advert: {
-    width: '100%',
-    height: 200,
-    borderRadius: 10,
-  },
-  HomeImage: {
+  homeImage: {
     width: '100%',
     height: 200,
     resizeMode: 'cover',
@@ -160,13 +166,10 @@ const styles = StyleSheet.create({
   textOnTop: {
     position: 'absolute',
     top: 80,
-    left: 30, // Adjust the top position based on your preference
+    left: 30,
     fontSize: 18,
     fontWeight: 'bold',
     color: 'white',
-  },
-  Button: {
-    alignItems: 'center',
   },
 });
 

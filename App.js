@@ -1,7 +1,7 @@
-// App.js
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { StatusBar } from 'react-native'; // Import StatusBar
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Provider } from 'react-redux';
 import store from './redux/store';
@@ -11,59 +11,57 @@ import SplashScreen from './Screens/SplashScreen';
 
 const Stack = createStackNavigator();
 
-// App.js
-// ... (other imports and code)
-
 export default function App() {
-const [initialRoute, setInitialRoute] = useState('Registration');
-const [showSplash, setShowSplash] = useState(true);
+  const [initialRoute, setInitialRoute] = useState('Registration');
+  const [showSplash, setShowSplash] = useState(true);
 
-useEffect(() => {
-  // Check if the user is signed in by retrieving data from AsyncStorage
-  const checkSignInStatus = async () => {
-    try {
-      const phoneNumber = await AsyncStorage.getItem('phoneNumber');
-      if (phoneNumber) {
-        // User is signed in, set the initial route to MainStack
-        setInitialRoute('MainStack');
+  useEffect(() => {
+    const checkSignInStatus = async () => {
+      try {
+        const phoneNumber = await AsyncStorage.getItem('phoneNumber');
+        if (phoneNumber) {
+          setInitialRoute('MainStack');
+        }
+      } catch (error) {
+        console.error('Error checking sign-in status:', error);
+      } finally {
+        setShowSplash(false);
       }
-    } catch (error) {
-      console.error('Error checking sign-in status:', error);
-    } finally {
-      // Hide the SplashScreen after the check is complete
-      setShowSplash(false);
+    };
+
+    checkSignInStatus();
+  }, []);
+
+  useEffect(() => {
+    if (showSplash) {
+      const splashTimer = setTimeout(() => {
+        setShowSplash(false);
+      }, 3000);
+
+      return () => clearTimeout(splashTimer);
     }
-  };
+  }, [showSplash]);
 
-  checkSignInStatus();
-}, []);
+  return (
+    <Provider store={store}>
+      <NavigationContainer>
+        {/* Add StatusBar component with desired properties */}
+        <StatusBar
+          backgroundColor="#FF7927" // Set the background color of the status bar
+          barStyle="light-content" // Set the text color of the status bar (options: 'default', 'light-content', 'dark-content')
+          translucent={false} // Set to true if you want the status bar to be translucent
+        />
 
-useEffect(() => {
-// Delay the navigation to the appropriate screen after showing SplashScreen
-if (showSplash) {
-const splashTimer = setTimeout(() => {
-setShowSplash(false);
-}, 3000); // Adjust the duration (in milliseconds) as needed
-
-return () => clearTimeout(splashTimer);
-}
-}, [showSplash]);
-
-// Wrap your NavigationContainer with a conditional rendering of SplashScreen
-return (
-<Provider store={store}>
-  <NavigationContainer>
-  {/* Conditional rendering of SplashScreen */}
-  {showSplash ? (
-    <SplashScreen />
-
-) : (
-<Stack.Navigator initialRouteName={initialRoute} screenOptions={{ headerShown: false }}>
-    <Stack.Screen name="Registration" component={RegistrationNav} />
-    <Stack.Screen name="MainStack" component={MainStack} />
-</Stack.Navigator>
-)}
-</NavigationContainer>
-</Provider>
-);
+        {/* Conditional rendering of SplashScreen */}
+        {showSplash ? (
+          <SplashScreen />
+        ) : (
+          <Stack.Navigator initialRouteName={initialRoute} screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="Registration" component={RegistrationNav} />
+            <Stack.Screen name="MainStack" component={MainStack} />
+          </Stack.Navigator>
+        )}
+      </NavigationContainer>
+    </Provider>
+  );
 }

@@ -1,11 +1,22 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, Alert, TouchableOpacity, ActivityIndicator, SafeAreaView } from 'react-native'; // Import Alert from 'react-native'
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Alert,
+  TouchableOpacity,
+  ActivityIndicator,
+  SafeAreaView,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView, // Import ScrollView
+} from 'react-native';
 import CheckBox from 'react-native-check-box';
 import CustomTextInput from '../Components/CustomTextInput';
 import Button from '../Components/Button';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 const PhoneNumberReg = () => {
@@ -18,30 +29,28 @@ const PhoneNumberReg = () => {
   const handleCheck = (newValue) => {
     setIsChecked(newValue);
   };
- 
-  
-  const handleRegistration = async () => { // Mark the function as async
+
+  const handleRegistration = async () => {
     if (!phoneNumber) {
       Alert.alert('Angalizo', 'Tafadhali weka namba ya simu.');
       return;
     }
-  
+
     if (isChecked) {
-      setIsLoading(true); // Set loading to true
+      setIsLoading(true);
+
       try {
-        const response = await axios.post('https://connect-ticketing.work.gd/user/phone-number', { phoneNumber });
+        // Send OTP to the phoneNumber
+        const response = await axios.post('https://connect-ticketing.work.gd/notification/send-notification', { phoneNumber });
         console.log(response.data.message);
-        
-        // Save phoneNumber to AsyncStorage
-        await AsyncStorage.setItem('phoneNumber', phoneNumber);
-        
-        // Navigate to the OTP screen with the phoneNumber
+
+        // Navigate to OTP screen and pass phoneNumber as route param
         navigation.navigate('OTP', { phoneNumber: phoneNumber });
       } catch (error) {
-        console.error('Error during registration:', error);
-        Alert.alert('Registration Error', 'There was an issue registering your phone number.');
+        console.error('Error sending OTP:', error);
+        Alert.alert('Error', 'There was an issue sending the OTP.');
       } finally {
-        setIsLoading(false); // Set loading to false on error or success
+        setIsLoading(false);
       }
     } else {
       Alert.alert('Angalizo', 'Kubali Vigezo na Masharti Kuendelea.');
@@ -50,51 +59,58 @@ const PhoneNumberReg = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.logoContainer}>
-        <Image source={require('../Images/Connect.png')} style={styles.logo} />
-      </View>
+      <ScrollView contentContainerStyle={styles.scrollViewContainer}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.keyboardAvoidingContainer}
+        >
+          <View style={styles.logoContainer}>
+            <Image source={require('../Images/Connect.png')} style={styles.logo} />
+          </View>
 
-      <View style={styles.header}>
-        <Text style={styles.headerText}>Register your account</Text>
-      </View>
+          <View style={styles.header}>
+            <Text style={styles.headerText}>Register your account</Text>
+          </View>
 
-      <View style={styles.textInput}>
-      <CustomTextInput
-        value={phoneNumber}
-        placeholder="Enter Phone Number"
-        onChangeText={(text) => setPhoneNumber(text)}
-        keyboardType="phone-pad"
-      />
-      </View>
+          <View style={styles.textInput}>
+            <CustomTextInput
+              value={phoneNumber}
+              placeholder="Enter Phone Number"
+              onChangeText={(text) => setPhoneNumber(text)}
+              keyboardType="phone-pad"
+            />
+          </View>
 
-      <View style={styles.checkboxContainer}>
-        <CheckBox
-          isChecked={isChecked}
-          onClick={() => handleCheck(!isChecked)} // Use onClick to handle the click event
-        />
-        <TouchableOpacity>
-        <Text style={styles.checkboxText}>
-          I have accept{' '}
-          <Text style={styles.linkText}>Terms and conditions</Text>.
-        </Text>
-        </TouchableOpacity>
-      </View>
+          <View style={styles.checkboxContainer}>
+            <CheckBox
+              isChecked={isChecked}
+              onClick={() => handleCheck(!isChecked)}
+            />
+            <TouchableOpacity>
+              <Text style={styles.checkboxText}>
+                I have accept{' '}
+                <Text style={styles.linkText}>Terms and conditions</Text>.
+              </Text>
+            </TouchableOpacity>
+          </View>
 
-      <View style={styles.buttonContainer}>
-        {isLoading ? (
-          <ActivityIndicator size="large" color="white" /> // Show loading spinner when isLoading is true
-        ) : (
-          <Button
-            title={
-              <>
-                Continue{' '}
-                <Icon name="arrow-right" size={16} color="white" />
-              </>
-            }
-            onPress={handleRegistration}
-          />
-        )}
-      </View>
+          <View style={styles.buttonContainer}>
+            {isLoading ? (
+              <ActivityIndicator size="large" color="white" />
+            ) : (
+              <Button
+                title={
+                  <>
+                    Continue{' '}
+                    <Icon name="arrow-right" size={16} color="white" />
+                  </>
+                }
+                onPress={handleRegistration}
+              />
+            )}
+          </View>
+        </KeyboardAvoidingView>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -105,6 +121,15 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
+  },
+  scrollViewContainer: {
+    flexGrow: 1,
+  },
+  keyboardAvoidingContainer: {
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
   },
   logoContainer: {
     alignItems: 'center',

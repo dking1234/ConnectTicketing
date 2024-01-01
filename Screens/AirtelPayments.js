@@ -85,7 +85,7 @@ const AirtelPayments = ({route}) => {
             </View>
         
             <View>
-            <Text style={styles.textColor}>1. On your phone, dial *!50*88#</Text>
+            <Text style={styles.textColor}>1. On your phone, dial *150*88#</Text>
             <Text style={styles.textColor}>2. Select option 4 (Pay by AirteMoney)</Text>
             <Text style={styles.textColor}>3. Select option 4 (Transport)</Text>
             <Text style={styles.textColor}>4. Choose Option 1 (Connect Ticket)</Text>

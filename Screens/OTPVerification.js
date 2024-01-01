@@ -4,7 +4,6 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import BackButton from '../Components/BackButton';
 import Button from '../Components/Button';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 const OTP = () => {
@@ -46,47 +45,49 @@ const handleConfirm = () => {
   navigation.navigate('UserName');
 };
 
+const route = useRoute();
+
+// ... (previous code)
+
 const verifyOtp = async () => {
   const otp = otpValues.join('');
   setIsLoading(true);
 
   try {
-    // Retrieve the phoneNumber from AsyncStorage
-    const phoneNumber = await AsyncStorage.getItem('phoneNumber');
+    // Retrieve the phoneNumber from the route params
+    const { phoneNumber } = route.params; // Use the route prop
 
-    // Ensure phoneNumber is retrieved
+    // Ensure phoneNumber is available
     if (!phoneNumber) {
       throw new Error('Phone number not found');
     }
 
-    const response = await fetch('https://connect-ticketing.work.gd/verify/verify-otp', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        phoneNumber,
-        otp,
-      }),
+    const response = await axios.post('https://connect-ticketing.work.gd/verify/verify-otp', {
+      phoneNumber,
+      otp,
     });
 
     // Check if the OTP verification was successful
-    const data = await response.json();
+    const data = response.data;
 
     if (data.success) {
-      // If so, navigate to the 'UserName' screen
+      // If so, navigate to the 'UserName' screen and pass phoneNumber as a parameter
       navigation.navigate('UserName', { phoneNumber });
     } else {
       // If not, set the error state with the message from the response or a default message
-      setError(data.message || 'Invalid OTP.');
+      setError(data.error || 'Invalid OTP.');
     }
   } catch (error) {
-    // Error handling remains the same...
-    // ...
+
+    // Use a generic error message
+    setError('OTP is invalid or expired.');
   } finally {
     setIsLoading(false);
   }
 };
+
+// ... (remaining code)
+
 
   return (
     <SafeAreaView style={styles.container}>
@@ -99,7 +100,7 @@ const verifyOtp = async () => {
     
     <View style={styles.textContainer}>
     <Text style={styles.headerText}>Verify Phone number</Text>
-    <Text style={styles.descriptText}>The verification have been sent to ********83. Enter code to verify</Text>
+    <Text style={styles.descriptText}>The verification have been sent to your number. Enter code to verify</Text>
     </View>
     
     <View style={{alignItems: 'center'}}>
@@ -125,7 +126,7 @@ const verifyOtp = async () => {
           <Button
             title={
               <>
-                Endelea{' '}
+                Continue{' '}
                 <Icon name="arrow-right" size={16} color="white" />
               </>
             }
@@ -165,6 +166,8 @@ const styles = StyleSheet.create({
     margin: 10,
     marginTop: 20
   },
+  
+  errorText:{color: 'red'},
 
   headerText: {
     fontSize: 20,

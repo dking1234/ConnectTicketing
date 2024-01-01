@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, SafeAreaView, ScrollView, ActivityIndicator } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import BackButton from '../Components/BackButton';
 import Button from '../Components/Button';
 import CustomTextInput from '../Components/CustomTextInput';
@@ -8,95 +8,86 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 const UserName = () => {
+  const navigation = useNavigation();
+  const route = useRoute();
 
-const navigation = useNavigation();
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
-const [firstName, setFirstName] = useState('');
-const [lastName, setLastName] = useState('');
-const [error, setError] = useState('');
-const [isLoading, setIsLoading] = useState(false);
+  // Use useEffect to retrieve phoneNumber from the route
+  useEffect(() => {
+    const { phoneNumber } = route.params;
 
-
-
-const saveUsername = async () => {
-  setIsLoading(true);
-
-  try {
-    // Retrieve the phoneNumber from AsyncStorage
-    const phoneNumber = await AsyncStorage.getItem('phoneNumber');
-
-    // Ensure phoneNumber is retrieved
-    if (!phoneNumber) {
-      throw new Error('Phone number not found. Please log in again.');
+    if (phoneNumber) {
+      setPhoneNumber(phoneNumber);
     }
+  }, [route.params]); // Run the effect whenever route.params changes
 
-    // Save the firstName in AsyncStorage
-    await AsyncStorage.setItem('firstName', firstName);
+  const saveUsername = async () => {
+    setIsLoading(true);
 
-    // Call the server endpoint to update the username
-    const response = await fetch('https://connect-ticketing.work.gd/user/user-name', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+    try {
+      if (!phoneNumber) {
+        throw new Error('Phone number not found. Please log in again.');
+      }
+
+      const response = await axios.post('https://connect-ticketing.work.gd/user/save-user', {
         phoneNumber,
         firstName,
         lastName,
-      }),
-    });
+      });
 
-    // Check if the username update was successful
-    const data = await response.json();
+      const data = response.data;
 
-    if (data.success) {
-      // Maybe navigate to another screen or update the state
-      navigation.navigate('MainStack', { screen: 'Tab', params: { screen: 'HomeScreen' } });
-    } else {
-      setError('Failed to update username.');
+      if (data.success) {
+        // Save the phoneNumber and firstName in AsyncStorage only when the user data is saved successfully
+        await AsyncStorage.setItem('phoneNumber', phoneNumber);
+        await AsyncStorage.setItem('firstName', firstName);
+
+        navigation.navigate('MainStack', { screen: 'Tab', params: { screen: 'HomeScreen' } });
+      } else {
+        setError(data.error || 'Failed to update username.');
+      }
+    } catch (error) {
+      setError(error.message || 'An error occurred while updating the username.');
+    } finally {
+      setIsLoading(false);
     }
-  } catch (error) {
-    setError(error.message || 'An error occurred while updating the username.');
-  } finally {
-    setIsLoading(false); // Set loading state to false when done
-  }
-};
-
-const handleConfirm = () => {
-  // Navigate to ClassCondition screen
-  navigation.navigate('MainStack', { screen: 'Tab', params: { screen: 'HomeScreen' } });
-};
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-    
-    <BackButton/>
-<ScrollView>
-    <View style={styles.logoContainer}>
-        <Image source={require('../Images/Connect.png')} style={styles.logo} />
-      </View>
-    
-    <View style={styles.textContainer}>
-    <Text style={styles.headerText}>Enter user name</Text>
-    <Text style={styles.descriptText}>Write your name for easy ticket processing</Text>
-    </View>
-    
-    <View style={{alignItems: 'center'}}>
-    <View style={styles.textInput}>
-        <CustomTextInput
-          value={firstName}
-          placeholder="Enter first name"
-          onChangeText={(text) => setFirstName(text)}
-        />
-           <CustomTextInput
-          value={lastName}
-          placeholder="Enter second name"
-          onChangeText={(text) => setLastName(text)}
-        />
-      </View>
-      
-      {error ? <Text style={{ color: 'red' }}>{error}</Text> : null}
-      {isLoading ? ( // Render loading indicator if isLoading is true
+      <BackButton />
+      <ScrollView>
+        <View style={styles.logoContainer}>
+          <Image source={require('../Images/Connect.png')} style={styles.logo} />
+        </View>
+
+        <View style={styles.textContainer}>
+          <Text style={styles.headerText}>Enter user name</Text>
+          <Text style={styles.descriptText}>Write your name for easy ticket processing</Text>
+        </View>
+
+        <View style={{ alignItems: 'center' }}>
+          <View style={styles.textInput}>
+            <CustomTextInput
+              value={firstName}
+              placeholder="Enter first name"
+              onChangeText={(text) => setFirstName(text)}
+            />
+            <CustomTextInput
+              value={lastName}
+              placeholder="Enter second name"
+              onChangeText={(text) => setLastName(text)}
+            />
+          </View>
+
+          {error ? <Text style={{ color: 'red' }}>{error}</Text> : null}
+          {isLoading ? (
+            // Render loading indicator if isLoading is true
             <ActivityIndicator size="large" color="#14684E" />
           ) : (
             <View style={styles.buttonContainer}>
@@ -111,7 +102,7 @@ const handleConfirm = () => {
             </View>
           )}
         </View>
-          </ScrollView>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -131,7 +122,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     margin: 10,
-    marginTop: 20
+    marginTop: 20,
   },
 
   headerText: {
@@ -148,36 +139,12 @@ const styles = StyleSheet.create({
   descriptText: {
     fontSize: 16,
     textAlign: 'center',
-    width: '65%'
-  },
-
-  input: {
-    borderBottomColor: '#14684E',
-    borderBottomWidth: 2,
-    fontSize: 50,
-    color: '#14684E',
-    textAlign: 'center',
-    width: 50,
-    paddingTop: 50,
-    marginBottom: 30,
+    width: '65%',
   },
 
   buttonContainer: {
     marginTop: 20,
     marginBottom: 50,
-  },
-
-  checkboxContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  checkboxText: {
-    marginLeft: 10,
-  },
-  linkText: {
-    color: 'blue',
-    fontWeight: '500',
   },
 
   textInput: {

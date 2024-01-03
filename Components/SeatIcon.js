@@ -1,0 +1,62 @@
+// SeatIcon.js
+
+import React from 'react';
+import { SvgXml } from 'react-native-svg';
+
+const seatSvg = `
+  <?xml version="1.0" encoding="utf-8"?>
+  <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+    viewBox="0 0 200 200" style="enable-background:new 0 0 290.49 290.49;" xml:space="preserve">
+    <image style="overflow:visible;" width="200" height="200" xlink:href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAABHNCSVQICAgIfAhkiAAAAAlwSFlz
+  AAALEwAACxMBAJqcGAAACbxJREFUeJzt3G2MHVUdx/Hv0paHlgIFbHksKEGBUotV5MEgAaNWDUGI
+  D8GSaCQBIkoaJTwYHtQQQrTGGIPVxKSiLzSgthYMEduKqC8USkAtFBUExUJBEGptC912fXEKdrcz
+  /3vv7sw9szvfT3JCclPO+e+c+c3cmTlzQZIkSZIkSZIkSZIkSerKQO4CGm4qcDgwDZicuZaJ6BVg
+  I/BPYFvmWgoZkOGmAucC5wCnA0flLac1tgPrgHuB5cBKYEfWijTMTGAx8CIwZMvengAuB/YK5kx9
+  MABcBrxE/p3Ctnv7K3BW6eypVvsBd5B/J7DFbTtwQ8kcqiYzgT+Qf/Jt3belwB5Fk1mnNl6k7wf8
+  Bpjbxb9dBzwMvEA6kqlaewAHAicAx9F5f1wCfKruotrup8RHqmeAa0i3d9U/hwFXAk8Tz8/FuQps
+  g4uIN/4SYHq26gSwL3AL5XP0X+CYbNVNYAcA/6J4o+/AI1PTXET6Wls0X8sz1jVhXU/5UWlRxrpU
+  bhHlczY/Y10TziRgPcUbekXGutTZCsrvaqkiZ1O8kQfx+2zTvYG0Tmvk3G2kD0/a61qANwDMAg4l
+  Hb1zu6Dk8zuAx/pZiHr2OLAM+PCIz6cD7wBW972iUZpD+p7/ALCV/A+WumkX1rIlVJU3AV8gPY8q
+  mr+twIOku4/nAFOyVNnBHMbvko1ja9geGrvTgbvpfT6fA74IzOh/ybsbIK2RGST/jj7atnflW0Vj
+  MQO4lbHP63PAJ/tc+zD7AD9i7H9I7uZLUM1xEmmZe5XzezvpZbe+GgBuG2PhTWmzKt42Gp0zSHel
+  6pjj+0nrvUZlNEfQ69j9jsJI20mvUb765Dq340lvC440F9jQ51o03DzgZ3Re4rOZdAPoCWALsD/p
+  GvLNxHdK30q6njmTtEylVseS3iMuS+ufgIWk4pvkxxTXuzhnUWIGnb9W/ZL0GvSeJX0cQFom9GiH
+  fm6r6W8YpmxHGwJuJsN6/S5dQXHNG/BCPafogvw54Lwe+poMXE18AP94VYUXOYK0qK9o4BvrHLgC
+  x1G+0a7KWFebnUr5nPwFOHqU/Z4N/Kek32dJ7wPV4rKSQdcwPl68+h3F9W+mu5enVK27KD+rzx5j
+  3++hfCXwtWPsu9SdJQOeX9eAFfsI5UesJxn7pKh7x1D+beT9FY1xU0n/66lp+dPagsFepvjuUBMN
+  kG75lYXkKeC0bNW1yzUUz8FdFY4xlfR2aNE476pwnNf8u2Cg8bbQbz7xRdwg6W22I3IV2BKrKd7+
+  7614nC+VjHNztx30cu0wVPDZGuBtPfTRBIuAr3X4N4OkSVxFOnM+v/MzVWMluz8KeAk4iGp/HGMe
+  aTHjSPdQw+9tFSXx/qoH6ZNvUH4WseVpq8IZG50B0k2YkWM91W0HTX1uUbfLga/mLkLD/KOGPodK
+  +u166UlbAzJEenj4CWBT3lK009aa+t1S8Nk+3f7PbQ3Iq24FTiS9sSbtpu0BgfQM5HzSzYbv4RlF
+  u/B9iP9bQ1qrcwlp+fVppFc+DyPdU2/Cu/UTwVHAwbmLqMNEuoulfL5D8b70rZrGe7BkvK74FUsK
+  GBApYECkgAGRAgZEChgQKWBApIABkQIGRAoYEClgQKSAAZECBkQKGBApYECkgAGRAgZEChgQKWBA
+  pIABkQIGRAoYEClgQKSAAZECBkQKGBApYECkgAGRAgZEChgQKWBApIABkQIGRAoYEClgQKSAAZEC
+  BkQKGBApYECkgAGRAgZEChgQKWBApIABkQIGRAoYEClgQKSAAZECBkQKGBApYECkgAGRAgZEChgQ
+  KWBApIABkQIGRAoYEClgQKSAAZECBkQKGBApYECkgAGRAgZEChgQKWBApIABkQIGRAoYEClgQKSA
+  AZECBkQKGBApYECkgAGRAgZEChgQKWBApIABkQIGRAoYEClgQKSAAZECBkQKGBApYECkgAGRAgZE
+  ChgQKWBApIABkQIGRAoYEClgQKSAAZECBkQKTM5dQIMNADN3til4MKnKwbkL6IUBGW428FFgAXAy
+  MD1vOcrNgCRvAW4AzsEzhXbR9oBMA74CXILBUIE2B+QYYAVwQu5C1FxtDciJwCrSBbiaoa4zeFG/
+  O7r9n3sJyBDpzs54dyTwC7oLxzrgYeAFYHudRbXIQcCHCj4/oKbxZhR8tqmOgTaRQrJre6yOgWo0
+  Gfg9u/8du7ZngGuAwzPVONHNpni7P1TDWNNJZ4uRY62rYSz+XDDQdtIRYbz4PHE4luCt3bpNAjZT
+  vC+9ruKxzi0YZwhYXvE4ANxeMtjldQxWg1kUnwWHSEeZi/OV1jq/pngePlfxOD8pGeeKiscB4NKSw
+  Z6m+Hte09xE+ZljUca62qjsTL4e2LeiMU6i+OvVEDXduTwIeLlkwJ8De9YxaEUmARsorn1Fxrra6
+  vWU77zfrKD/PYH7Svp/oIL+S327ZNAh4F7SBVgTnUlxzYOk5yHqv2WU70uXjqHfAeC7Qd8Lx9B3R
+  4cCLwaDbwZuIe2QM2jObeHrKa53Wc6iWm4u6QBVdk14Nb3vP9OAH5T0OQQ8SB9WTHwsKGC8tQsr3
+  jbqzWLi+VkJzOmyr/cBjwZ9DQKnVVh76MagkPHUjq16w6gne9H5udQO4G7Serm5pNvwk4ADgVOBq
+  0hnhk5zfV2f/qbXXEv5hdZ4aXtXvlXUq0OBx6l3nr9Ppq/7C4C/91hsk1pb16I1zZHAI9Qzx0tJZ
+  5xsppIevDxJPX9gnW1WDdtDo7M/5Q/2RtNeBj471qKqPO0MAKcAZ5FWyx5GuqvQhPcsjicFeaR3ky
+  4E1RwLgS+T9p/R+hXwGeCPlVTUAj+k+CizOGdRKrUP8GlgLd2fMbYBd5IOeurRxRRv1A14od508y
+  le3LiDtILj66TfERhPi2YbZybpCFMUkqsy1qXOrqR43u7JWNOEVLYaeTPp/rqa5+2Ur/+7IGNdE9
+  J8yp/bPElz15G11VzgWYrn61G8RV+LpZRf5D1FH5ciKHQe8Zq/D+QrbWKbQfxgc5C02PKIXAW23F
+  w6PwtZ2s+CmrLatp9OJl3gFT0XedUgsJr0yydrged3fqZqTQEOAeaRVmWc0uHf30daKb6l5rpabw
+  FpI/f7yb1t9O0hxtnv+o53Z1B+EWhrVrub+n4WSIHDgbvIvwPYitsW0otTWRcbCj5IOoXn3iFsqW0
+  DboFtrNzyXJKI2Ac3U3TjJ00JkiRJkiRJkiRJkiRJ0qj9D6XbX/G565eAAAAAAElFTkSuQmCC" transform="matrix(6.885270e-17 1.1244 -1.1244 6.885270e-17 257.689 32.7991)">
+  </image>
+  </svg>
+`;
+
+const SeatIcon = () => {
+  return <SvgXml xml={seatSvg} width="50" height="50" />;
+};
+
+export default SeatIcon;

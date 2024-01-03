@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView, StyleSheet, View, ActivityIndicator } from 'react-native';
+import { ScrollView, StyleSheet, View, ActivityIndicator, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import TouchableScale from 'react-native-touchable-scale';
 import BusTripDetails from '../Components/BusTripDetails';
@@ -9,6 +9,7 @@ const SearchResult = ({ route }) => {
   const { origin, destination, departureDate } = route.params;
   const [busTrips, setBusTrips] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasError, setHasError] = useState(false);
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -30,9 +31,11 @@ const SearchResult = ({ route }) => {
   
         setBusTrips(response.data);
         setIsLoading(false);
+        setHasError(response.data.length === 0); // Check if there are no results
       } catch (error) {
         console.error('Error fetching search results:', error);
         setIsLoading(false);
+        setHasError(true);
       }
     };
   
@@ -48,6 +51,10 @@ const SearchResult = ({ route }) => {
     <ScrollView style={styles.container}>
       {isLoading ? (
         <ActivityIndicator size="large" color="black" />
+      ) : hasError ? (
+        <View style={styles.noResultsContainer}>
+          <Text style={styles.noResultsText}> !OOPS , No bus trips available for the selected route and date.</Text>
+        </View>
       ) : (
         busTrips.map((trip, index) => (
           <View key={trip._id} style={index === busTrips.length - 1 ? styles.lastTrip : {}}>
@@ -87,6 +94,18 @@ const styles = StyleSheet.create({
   },
   lastTrip: {
     marginBottom: 20,
+  },
+  noResultsContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  noResultsText: {
+    fontSize: 16,
+    color: 'gray',
+    textAlign: 'center', // Center the text
+    width: '60%',
+    marginTop: 300, // Add margin to the top if needed
   },
 });
 

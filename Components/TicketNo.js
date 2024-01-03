@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import axios from 'axios';
 
-const TicketNo = ({ seatNumber, scheduleId }) => {
-  const [price, setPrice] = useState(null);
+const TicketNo = ({ seatNumbers, scheduleId, }) => {
+  const [pricePerSeat, setPricePerSeat] = useState(null);
+  const [totalPrice, setTotalPrice] = useState(null);
 
   useEffect(() => {
     const fetchPrice = async () => {
@@ -16,7 +17,7 @@ const TicketNo = ({ seatNumber, scheduleId }) => {
   
         const data = await response.json();
         // Replace the following line based on the actual structure of your API response
-        setPrice(data?.price || 'N/A');
+        setPricePerSeat(data?.price || 'N/A');
       } catch (error) {
         console.error('Error fetching price:', error);
       }
@@ -25,19 +26,26 @@ const TicketNo = ({ seatNumber, scheduleId }) => {
     fetchPrice();
   }, [scheduleId]);
 
+  useEffect(() => {
+    // Calculate total price based on the number of selected seats
+    const numberOfSeats = seatNumbers.length;
+    const totalPrice = numberOfSeats * pricePerSeat;
+    setTotalPrice(totalPrice);
+  }, [pricePerSeat, seatNumbers]);
+
   return (
     <View>
       <View style={styles.passengerDetailsContainer}>
         <View style={styles.marginContainer}>
           <View style={styles.row}>
             <Text style={styles.textGray}>Tickets (1 passenger)</Text>
-            <Text style={styles.textBold}>Seat No.{seatNumber}</Text>
+            <Text style={styles.textBold}>Seat No. {seatNumbers.join(', ')}</Text>
           </View>
           <View style={styles.row}>
             <Text style={styles.textGray}>
               <Text style={styles.textBold}>Bus Fare Price</Text>
             </Text>
-            <Text style={styles.textBold}>{price} Tsh</Text>
+            <Text style={styles.textBold}>{totalPrice} Tsh</Text>
           </View>
         </View>
       </View>

@@ -6,7 +6,7 @@ import {
   SafeAreaView,
   ActivityIndicator,
   Text,
-  FlatList, // Switched from ScrollView to FlatList
+  FlatList,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import BookingData from '../Components/BookingData';
@@ -80,12 +80,20 @@ const HomeScreen = ({ passengers }) => {
     } else if (inputType === 'destination') {
       setSelectedDestination(city);
     }
+
+    // Update isCitySearchFilled state
+    setIsCitySearchFilled(!!selectedOrigin && !!selectedDestination);
+
+    // Your additional logic here (dispatching, updating state, etc.)
   };
 
   const handleDateSelect = (date, type) => {
     if (type === 'departureDate') {
       setSelectedDate(date);
     }
+
+    // Update isDateTimePickerFilled state
+    setIsDateTimePickerFilled(!!date);
   };
 
   const handleConfirm = () => {

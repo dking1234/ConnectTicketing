@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, FlatList, Modal } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { connect } from 'react-redux';
-import { setTripDetails } from '../redux/actions/tripActions';
+// CitySearch.js
 
-const CitySearch = ({ dispatch, onCitySelect, setIsCitySearchFilled }) => {
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import { View, TouchableOpacity, Text, StyleSheet, TextInput, FlatList, Modal } from 'react-native';
+import CitySuggestions from './CitySuggestions';
+
+const CitySearch = ({ onCitySelect, setIsCitySearchFilled }) => {
   const [origin, setOrigin] = useState('');
   const [destination, setDestination] = useState('');
   const [originResults, setOriginResults] = useState([]);
@@ -14,47 +15,55 @@ const CitySearch = ({ dispatch, onCitySelect, setIsCitySearchFilled }) => {
   const [showOriginModal, setShowOriginModal] = useState(false);
   const [showDestinationModal, setShowDestinationModal] = useState(false);
 
-  const accessToken = "pk.baa9b8c945f3a7c491e2dd99b817f193";
-  const apiUrl = "https://us1.locationiq.com/v1/autocomplete.php";
+  const accessToken = 'pk.baa9b8c945f3a7c491e2dd99b817f193';
+  const apiUrl = 'https://us1.locationiq.com/v1/autocomplete.php';
 
   useEffect(() => {
+    const searchCities = async (query, setResults) => {
+      try {
+        const params = new URLSearchParams({
+          key: accessToken,
+          q: query,
+          format: 'json',
+          countrycodes: 'TZ',
+          tag: 'place:city',
+          limit: 10,
+        });
+
+        const response = await axios.get(`${apiUrl}?${params.toString()}`);
+
+        const tanzaniaCities = response.data
+          .map((city) => city.display_name.split(',')[0].trim());
+
+        setResults(tanzaniaCities);
+      } catch (error) {
+        console.error('Error fetching city suggestions', error);
+      }
+    };
+
+    // Debounce the searchCities function to limit the rate of requests
+    const debounce = (func, delay) => {
+      let timeout;
+      return function (...args) {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => func.apply(this, args), delay);
+      };
+    };
+
+    const debouncedSearchCities = debounce(searchCities, 500);
+
     if (origin) {
-      searchCities(origin, setOriginResults);
+      debouncedSearchCities(origin, setOriginResults);
     } else {
       setOriginResults([]);
     }
-  }, [origin]);
 
-  useEffect(() => {
     if (destination) {
-      searchCities(destination, setDestinationResults);
+      debouncedSearchCities(destination, setDestinationResults);
     } else {
       setDestinationResults([]);
     }
-  }, [destination]);
-
-  const searchCities = (query, setResults) => {
-    const params = new URLSearchParams({
-      key: accessToken,
-      q: query,
-      format: "json",
-      countrycodes: "TZ",
-      tag: "place:city",
-      limit: 10,
-    });
-
-    fetch(`${apiUrl}/autocomplete?${params}`)
-      .then(response => response.json())
-      .then(data => {
-        if (Array.isArray(data) && data.length > 0 && data[0].display_name) {
-          const cityNames = data.map(city => city.display_name.split(',')[0].trim());
-          setResults(cityNames);
-        } else {
-          setResults([]);
-        }
-      })
-      .catch(error => console.error('Error:', error));
-  };
+  }, [origin, destination]);
 
   const handleCitySelection = (city, inputType) => {
     if (inputType === 'origin') {
@@ -67,23 +76,20 @@ const CitySearch = ({ dispatch, onCitySelect, setIsCitySearchFilled }) => {
       setDestinationResults([]);
     }
 
-    // Dispatch the action to update Redux store
-    dispatch(setTripDetails(origin, destination));
+    // Dispatch the action to update Redux store (if needed)
 
     // Call the prop function to pass the selected city to the parent
     if (onCitySelect) {
       onCitySelect(city, inputType);
       setIsCitySearchFilled(true); // Set the state variable
     }
-  };
-  
-  const handleSwap = () => {
-    const temp = origin;
-    setOrigin(destination);
-    setDestination(temp);
 
-    setSelectedOrigin(selectedDestination);
-    setSelectedDestination(selectedOrigin);
+    // Close the modal
+    if (inputType === 'origin') {
+      setShowOriginModal(false);
+    } else if (inputType === 'destination') {
+      setShowDestinationModal(false);
+    }
   };
 
   return (
@@ -92,98 +98,30 @@ const CitySearch = ({ dispatch, onCitySelect, setIsCitySearchFilled }) => {
         style={styles.inputContainer}
         onPress={() => setShowOriginModal(true)}
       >
-        <Ionicons
-          name="md-locate"
-          size={24}
-          color="gray"
-          style={styles.icon}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder={`Enter origin city${selectedOrigin ? ` (Selected: ${selectedOrigin} - Origin)` : ''}`}
-          value={origin}
-          onChangeText={text => setOrigin(text)}
-        />
+        <Text>{selectedOrigin ? `From: ${selectedOrigin}` : 'Select origin'}</Text>
       </TouchableOpacity>
 
-      <Modal
-        visible={showOriginModal}
-        animationType="slide"
-        transparent={true}
-      >
-        <View style={styles.modalContainer}>
-          <FlatList
-            data={originResults}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
-              <TouchableOpacity onPress={() => handleCitySelection(item, 'origin')}>
-                <Text style={styles.resultText}>{item}</Text>
-              </TouchableOpacity>
-            )}
-          />
-          <TouchableOpacity onPress={() => setShowOriginModal(false)}>
-            <Text style={styles.closeButton}>Close</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
+      <CitySuggestions
+        isVisible={showOriginModal}
+        onClose={() => setShowOriginModal(false)}
+        onCitySelect={(city) => handleCitySelection(city, 'origin')}
+        results={originResults}
+        searchCities={(text) => setOrigin(text)}
+      />
 
       <TouchableOpacity
         style={styles.inputContainer}
         onPress={() => setShowDestinationModal(true)}
       >
-        <Ionicons
-          name="location-outline"
-          size={24}
-          color="gray"
-          style={styles.icon}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder={`Enter destination city${selectedDestination ? ` (Selected: ${selectedDestination} - Destination)` : ''}`}
-          value={destination}
-          onChangeText={text => setDestination(text)}
-        />
+        <Text>{selectedDestination ? `To: ${selectedDestination}` : 'Select destination'}</Text>
       </TouchableOpacity>
 
-      <Modal
-        visible={showDestinationModal}
-        animationType="slide"
-        transparent={true}
-      >
-        <View style={styles.modalContainer}>
-          <FlatList
-            data={destinationResults}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
-              <TouchableOpacity onPress={() => handleCitySelection(item, 'destination')}>
-                <Text style={styles.resultText}>{item}</Text>
-              </TouchableOpacity>
-            )}
-          />
-          <TouchableOpacity onPress={() => setShowDestinationModal(false)}>
-            <Text style={styles.closeButton}>Close</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
-
-      <FlatList
-        data={originResults}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => handleCitySelection(item, 'origin')}>
-            <Text style={styles.resultText}>{item}</Text>
-          </TouchableOpacity>
-        )}
-      />
-
-      <FlatList
-        data={destinationResults}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => handleCitySelection(item, 'destination')}>
-            <Text style={styles.resultText}>{item}</Text>
-          </TouchableOpacity>
-        )}
+      <CitySuggestions
+        isVisible={showDestinationModal}
+        onClose={() => setShowDestinationModal(false)}
+        onCitySelect={(city) => handleCitySelection(city, 'destination')}
+        results={destinationResults}
+        searchCities={(text) => setDestination(text)}
       />
     </View>
   );
@@ -201,42 +139,9 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginBottom: 10,
     height: 45,
-    position: 'relative',
-    zIndex: 1,
-  },
-  input: {
-    flex: 1,
-    backgroundColor: 'transparent',
-    padding: 10,
-    paddingLeft: 40,
-    paddingRight: 40,
-    borderRadius: 5,
-    color: 'gray',
-    fontSize: 16,
-    marginLeft: 10,
-  },
-  icon: {
-    marginRight: 10,
-    position: 'absolute',
-    left: 15,
-    top: 8,
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  closeButton: {
-    fontSize: 18,
-    color: 'white',
-    textAlign: 'center',
-    padding: 10,
-    backgroundColor: 'tomato',
-  },
-  resultText: {
-    fontSize: 16,
-    marginBottom: 8,
+    justifyContent: 'center',
+    paddingLeft: 10,
   },
 });
 
-export default connect()(CitySearch);
+export default CitySearch;

@@ -5,7 +5,7 @@ import WideButton from '../Components/WideButton';
 
 
 const AirtelPayments = ({route}) => {
-    const { companyName, scheduleId, seatNumber, userId } = route.params;
+    const { companyName, scheduleId, seatNumbers, userId } = route.params;
 
     const [price, setPrice] = useState(null);
     const [total, setTotal] = useState(null);
@@ -50,7 +50,7 @@ const AirtelPayments = ({route}) => {
         body: JSON.stringify({
           companyName,
           scheduleId,
-          seatNumber,
+          seatNumbers,
           userId,
           total,
         }),

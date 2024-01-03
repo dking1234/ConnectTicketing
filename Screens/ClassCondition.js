@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 
 const ClassCondition = ({ route }) => {
-  const { companyName, busId, seatNumber, scheduleId } = route.params;
+  const { companyName, busId, seatNumbers, scheduleId } = route.params;
   const navigation = useNavigation();
   const [userId, setUserId] = useState(null);
 
@@ -33,7 +33,7 @@ const ClassCondition = ({ route }) => {
     navigation.navigate('SelectPayment', {
       scheduleId: scheduleId,
       companyName,
-      seatNumber,
+      seatNumbers,
       userId, // Pass userId to SelectPayment
     });
   };
@@ -48,7 +48,7 @@ const ClassCondition = ({ route }) => {
         <FareCondition />
       </View>
       <View style={styles.container}>
-        <TicketNo seatNumber={seatNumber} scheduleId={scheduleId} />
+        <TicketNo seatNumbers={seatNumbers} scheduleId={scheduleId} />
       </View>
       <View style={{ alignItems: 'center', marginTop: 30 }}>
         <WideButton title="Proceed" onPress={handleContinue} />

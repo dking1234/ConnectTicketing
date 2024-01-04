@@ -5,7 +5,7 @@ import WideButton from '../Components/WideButton';
 
 
 const VodaPayments = ({route}) => {
-    const { companyName, scheduleId, seatNumber, userId } = route.params;
+    const { companyName, scheduleId, seatNumbers, userId } = route.params;
 
     const [price, setPrice] = useState(null);
     const [total, setTotal] = useState(null);
@@ -32,12 +32,14 @@ const VodaPayments = ({route}) => {
 
   useEffect(() => {
     if (price !== null) {
-      // Assuming service fee is 500 Tsh
-      const serviceFee = 500;
-      const calculatedTotal = price + serviceFee;
+      // Assuming service fee is 500 Tsh per seat
+      const serviceFeePerSeat = 500;
+      const numberOfSeats = seatNumbers.length;
+  
+      const calculatedTotal = price * numberOfSeats + serviceFeePerSeat;
       setTotal(calculatedTotal);
     }
-  }, [price]);
+  }, [price, seatNumbers]);
 
   const handleConfirm = async () => {
     try {
@@ -50,7 +52,7 @@ const VodaPayments = ({route}) => {
         body: JSON.stringify({
           companyName,
           scheduleId,
-          seatNumber,
+          seatNumber: seatNumbers.join(','),
           userId,
           total,
         }),
@@ -99,10 +101,10 @@ const VodaPayments = ({route}) => {
 
           <View style={styles.passengerDetailsContainer}>
           <View style={styles.marginContainer}>
-            <View style={styles.row}>
-                <Text style={styles.textGray}>Seat Price</Text>
-                <Text style={styles.textBold}>{price} Tsh</Text>
-            </View>
+          <View style={styles.row}>
+                   <Text style={styles.textGray}>Seat Price ({seatNumbers.length} seats)</Text>
+                   <Text style={styles.textBold}>{price * seatNumbers.length} Tsh</Text>
+             </View>
             <View style={styles.row}>
                 <Text style={styles.textGray}>Service Fee</Text>
                 <Text style={styles.textBold}>500 Tsh</Text>

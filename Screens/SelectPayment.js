@@ -4,28 +4,27 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 const SelectPayment = ({ route }) => {
-  const { companyName, scheduleId, seatNumber, userId } = route.params;
-
-    const navigation = useNavigation();
+  const { companyName, scheduleId, seatNumbers, userId, boardingPoint, droppingPoint } = route.params;
+  const navigation = useNavigation();
 
     const handleHalotel = () => {
       // Navigate to ClassCondition screen
-      navigation.navigate('HaloPayments', {scheduleId: scheduleId, companyName, seatNumber, userId});
+      navigation.navigate('HaloPayments', {scheduleId: scheduleId, companyName, seatNumbers, userId, boardingPoint, droppingPoint});
     };
 
     const handleTigo = () => {
       // Navigate to ClassCondition screen
-      navigation.navigate('TigoPayments', {scheduleId: scheduleId, companyName, seatNumber, userId});
+      navigation.navigate('TigoPayments', {scheduleId: scheduleId, companyName, seatNumbers, userId, boardingPoint, droppingPoint});
     };
     
     const handleVodacom = () => {
       // Navigate to ClassCondition screen
-      navigation.navigate('VodaPayments', {scheduleId: scheduleId, companyName, seatNumber, userId});
+      navigation.navigate('VodaPayments', {scheduleId: scheduleId, companyName, seatNumbers, userId, boardingPoint, droppingPoint});
     };
 
     const handleAirtel = () => {
       // Navigate to ClassCondition screen
-      navigation.navigate('AirtelPayments', {scheduleId: scheduleId, companyName, seatNumber, userId});
+      navigation.navigate('AirtelPayments', {scheduleId: scheduleId, companyName, seatNumbers, userId, boardingPoint, droppingPoint});
     };
   return (
     <View>

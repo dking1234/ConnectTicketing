@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 
 const ClassCondition = ({ route }) => {
-  const { companyName, busId, seatNumbers, scheduleId } = route.params;
+  const { companyName, busId, seatNumbers, scheduleId, boardingPoint, droppingPoint } = route.params;
   const navigation = useNavigation();
   const [userId, setUserId] = useState(null);
 
@@ -29,12 +29,14 @@ const ClassCondition = ({ route }) => {
   }, []);
 
   const handleContinue = () => {
-    // Navigate to SelectPayment screen with userId as a parameter
+    // Navigate to SelectPayment screen with userId, boardingPoint, and droppingPoint as parameters
     navigation.navigate('SelectPayment', {
       scheduleId: scheduleId,
       companyName,
       seatNumbers,
       userId, // Pass userId to SelectPayment
+      boardingPoint, // Pass boardingPoint to SelectPayment
+      droppingPoint, // Pass droppingPoint to SelectPayment
     });
   };
 

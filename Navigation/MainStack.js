@@ -12,6 +12,8 @@ import TicketScreen from '../Screens/TicketScreen';
 import TigoPayments from '../Screens/TigoPayments';
 import VodaPayments from '../Screens/VodaPayments';
 import AirtelPayments from '../Screens/AirtelPayments';
+import BoardingPoint from '../Screens/BoardingPoint';
+import DroppingPoint from '../Screens/DroppingPoint';
 
 
 const Stack = createStackNavigator();
@@ -45,6 +47,14 @@ const MainStack = () => {
           ),
         })}
       />
+       <Stack.Screen name="BoardingPoint" component={BoardingPoint} options={{
+          header: (props) => <CustomHeader {...props} />
+        }} />
+
+       <Stack.Screen name="DroppingPoint" component={DroppingPoint} options={{
+          header: (props) => <CustomHeader {...props} />
+        }} />
+
         <Stack.Screen name="ClassCondition" component={ClassCondition} options={{
           header: (props) => <CustomHeader {...props} />
         }} />

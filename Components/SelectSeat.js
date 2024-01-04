@@ -151,7 +151,7 @@
 
       const handleContinue = () => {
         // Pass parameters to the 'ClassCondition' screen
-        navigation.navigate('ClassCondition', {
+        navigation.navigate('BoardingPoint', {
           busId: busId,
           seatNumbers: selectedSeats, // Pass an array of selected seats
           scheduleId: scheduleId,

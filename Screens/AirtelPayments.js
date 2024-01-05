@@ -43,7 +43,7 @@
     const handleConfirm = async () => {
       try {
         // Send a POST request to create the ticket
-        const response = await fetch('http://192.168.43.21:3000/api/create-tickets', {
+        const response = await fetch('https://connect-ticketing.work.gd/api/create-tickets', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

@@ -5,11 +5,10 @@ import WideButton from '../Components/WideButton';
 
 
 const TigoPayments = ({route}) => {
-    const { companyName, scheduleId, seatNumbers, userId } = route.params;
-
-    const [price, setPrice] = useState(null);
-    const [total, setTotal] = useState(null);
-    const navigation = useNavigation();
+  const { companyName, scheduleId, seatNumbers, userId, boardingPoint, droppingPoint } = route.params;
+  const [price, setPrice] = useState(null);
+  const [total, setTotal] = useState(null);
+  const navigation = useNavigation();
 
   useEffect(() => {
     const fetchPrice = async () => {
@@ -35,7 +34,7 @@ const TigoPayments = ({route}) => {
       // Assuming service fee is 500 Tsh per seat
       const serviceFeePerSeat = 500;
       const numberOfSeats = seatNumbers.length;
-  
+
       const calculatedTotal = price * numberOfSeats + serviceFeePerSeat;
       setTotal(calculatedTotal);
     }
@@ -44,7 +43,7 @@ const TigoPayments = ({route}) => {
   const handleConfirm = async () => {
     try {
       // Send a POST request to create the ticket
-      const response = await fetch('http://192.168.43.21:3000/api/create-tickets', {
+      const response = await fetch('https://connect-ticketing.work.gd/api/create-tickets', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -55,6 +54,8 @@ const TigoPayments = ({route}) => {
           seatNumber: seatNumbers.join(','),
           userId,
           total,
+          boardingPoint: boardingPoint || 'DefaultBoardingPoint',
+          droppingPoint: droppingPoint || 'DefaultDroppingPoint',
         }),
       });
 

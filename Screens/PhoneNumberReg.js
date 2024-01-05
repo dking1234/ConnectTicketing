@@ -10,10 +10,10 @@ import {
   SafeAreaView,
   KeyboardAvoidingView,
   Platform,
-  ScrollView, // Import ScrollView
+  ScrollView,
 } from 'react-native';
 import CheckBox from 'react-native-check-box';
-import CustomTextInput from '../Components/CustomTextInput';
+import CustomPhoneInput from '../Components/CustomPhoneInput';
 import Button from '../Components/Button';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation } from '@react-navigation/native';
@@ -22,7 +22,11 @@ import axios from 'axios';
 const PhoneNumberReg = () => {
   const navigation = useNavigation();
 
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState({
+    cca2: 'TZ', // ISO country code for Tanzania
+    callingCode: '+255', // International dialing code for Tanzania
+  });
+  const [phoneNumber, setPhoneNumber] = useState(selectedCountry.callingCode); // Initialize with default country code
   const [isChecked, setIsChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -31,7 +35,7 @@ const PhoneNumberReg = () => {
   };
 
   const handleRegistration = async () => {
-    if (!phoneNumber) {
+    if (!phoneNumber || phoneNumber.length <= selectedCountry.callingCode.length) {
       Alert.alert('Angalizo', 'Tafadhali weka namba ya simu.');
       return;
     }
@@ -40,12 +44,16 @@ const PhoneNumberReg = () => {
       setIsLoading(true);
 
       try {
-        // Send OTP to the phoneNumber
-        const response = await axios.post('https://connect-ticketing.work.gd/notification/send-notification', { phoneNumber });
+        // Combine country code and phone number
+        const fullPhoneNumber = `${selectedCountry.callingCode}${phoneNumber.substring(selectedCountry.callingCode.length)}`;
+
+        // Send OTP to the fullPhoneNumber
+        const response = await axios.post('https://connect-ticketing.work.gd/notification/send-notification', { phoneNumber: fullPhoneNumber });
         console.log(response.data.message);
 
-        // Navigate to OTP screen and pass phoneNumber as route param
-        navigation.navigate('OTP', { phoneNumber: phoneNumber });
+        // Navigate to OTP screen and pass fullPhoneNumber as route param
+        navigation.navigate('OTP', { phoneNumber: fullPhoneNumber });
+        console.log('Full Phone Number:', fullPhoneNumber);
       } catch (error) {
         console.error('Error sending OTP:', error);
         Alert.alert('Error', 'There was an issue sending the OTP.');
@@ -73,11 +81,11 @@ const PhoneNumberReg = () => {
           </View>
 
           <View style={styles.textInput}>
-            <CustomTextInput
+            <CustomPhoneInput
               value={phoneNumber}
-              placeholder="Enter Phone Number"
               onChangeText={(text) => setPhoneNumber(text)}
-              keyboardType="phone-pad"
+              onCountryChange={(country) => setSelectedCountry(country)}
+              countryCode={selectedCountry?.cca2}
             />
           </View>
 
@@ -88,7 +96,7 @@ const PhoneNumberReg = () => {
             />
             <TouchableOpacity>
               <Text style={styles.checkboxText}>
-                I have accept{' '}
+                I have accepted{' '}
                 <Text style={styles.linkText}>Terms and conditions</Text>.
               </Text>
             </TouchableOpacity>

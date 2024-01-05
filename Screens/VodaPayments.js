@@ -5,11 +5,10 @@ import WideButton from '../Components/WideButton';
 
 
 const VodaPayments = ({route}) => {
-    const { companyName, scheduleId, seatNumbers, userId } = route.params;
-
-    const [price, setPrice] = useState(null);
-    const [total, setTotal] = useState(null);
-    const navigation = useNavigation();
+  const { companyName, scheduleId, seatNumbers, userId, boardingPoint, droppingPoint } = route.params;
+  const [price, setPrice] = useState(null);
+  const [total, setTotal] = useState(null);
+  const navigation = useNavigation();
 
   useEffect(() => {
     const fetchPrice = async () => {
@@ -35,7 +34,7 @@ const VodaPayments = ({route}) => {
       // Assuming service fee is 500 Tsh per seat
       const serviceFeePerSeat = 500;
       const numberOfSeats = seatNumbers.length;
-  
+
       const calculatedTotal = price * numberOfSeats + serviceFeePerSeat;
       setTotal(calculatedTotal);
     }
@@ -55,6 +54,8 @@ const VodaPayments = ({route}) => {
           seatNumber: seatNumbers.join(','),
           userId,
           total,
+          boardingPoint: boardingPoint || 'DefaultBoardingPoint',
+          droppingPoint: droppingPoint || 'DefaultDroppingPoint',
         }),
       });
 
